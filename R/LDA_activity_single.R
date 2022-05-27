@@ -17,7 +17,7 @@
 #'                 "wells" = rep(25,4),
 #'                 "positive" = c(2,5,10,20))
 #' act <- LDA_activity_single(x)
-#' @importFrom
+#' @importFrom stats "predict"
 #' @export
 #'
 LDA_activity_single <- function(x,

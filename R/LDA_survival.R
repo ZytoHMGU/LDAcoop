@@ -15,9 +15,9 @@
 #'                 "positive" = c(2,5,10,20,1,2,6,11),
 #'                 "group" = c(rep("A",4),rep("B",4)))
 #' act <- LDA_survival(x)
-#' @importFrom
 #' @export
-LDA_survival(x,name = "cell linea a"){
+#'
+LDA_survival <- function(x,name = "cell linea a"){
   if (!(class(x)[1] %in% c("data.frame","matrix"))){
     stop("error: x must be of class data.frame or matrix")
   }
@@ -29,12 +29,12 @@ LDA_survival(x,name = "cell linea a"){
   act <- LDA_activity(x,name)
   ref <- act[[1]]
   sf_list <- vector(mode = "list",length = length(act)-1)
-  for (i in 1:length(sf)){
+  for (i in 1:length(sf_list)){
     act.0 <- ref
     act.1 <- act[[i+1]]
-    sf$treatment = act.1$treatment
     sf <- LDA_survival_single(act.0 = act.0,
                               act.x = act.1)
+    sf$treatment = act.1$treatment
     sf_list[[i]] <- sf
   }
   return(sf_list)

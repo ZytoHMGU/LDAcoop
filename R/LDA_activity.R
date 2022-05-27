@@ -15,7 +15,6 @@
 #'                 "positive" = c(2,5,10,20,1,2,6,11),
 #'                 "group" = c(rep("A",4),rep("B",4)))
 #' act <- LDA_activity(x)
-#' @importFrom
 #' @export
 #'
 LDA_activity <- function(x,name = "LDA cells"){
@@ -25,7 +24,8 @@ LDA_activity <- function(x,name = "LDA cells"){
   if (ncol(x) == 3){
     act <- LDA_activity_single(x,name)
   }
-  if (ncol(x) == 4){
+  if (ncol(x) > 3){
+    x <- x[,1:4]
     colnames(x) <- c("dose","wells","positive","group")
     groups <- unique(x$group)
     act <- vector(mode = "list",length = length(groups))

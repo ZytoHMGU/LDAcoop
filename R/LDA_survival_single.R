@@ -16,8 +16,8 @@
 #'                 "group" = c(rep("A",4),rep("B",4)))
 #' act <- LDA_activity(x)
 #' sf <- LDA_survival(act)
-#' @importFrom
 #' @export
+#'
 LDA_survival_single <- function(act.0,act.x){
   result <- list("treat" = act.x$treatment,
               "sf" = NA,
