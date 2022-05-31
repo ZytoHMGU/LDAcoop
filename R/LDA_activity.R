@@ -37,6 +37,7 @@ LDA_activity <- function(x,name = "LDA cells"){
                               drop = T),name,treat = groups[i])
 
     }
+    class(act) <- "LDA_activity_list"
   }
   return(act)
 }

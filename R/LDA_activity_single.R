@@ -110,5 +110,6 @@ LDA_activity_single <- function(x,
                   "Sigma" = Sig,
                   "model" = fit.mod,
                   "p.lin.Model" = p.b)
+  class(results) <- "LDA_activity_object"
   return(results)
 }
