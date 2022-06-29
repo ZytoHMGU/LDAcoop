@@ -7,7 +7,7 @@
 LDA_plot(LDA_act)
 }
 \arguments{
-\item{LDA_act}{output from LDA_activity()}
+\item{LDA_act}{output from LDA_activity}
 }
 \value{
 none
@@ -21,5 +21,4 @@ x <- data.frame("dose" = c(10,50,100,250,10,50,100,250),
                 "positive" = c(2,5,10,20,1,2,6,11),
                 "group" = c(rep("A",4),rep("B",4)))
 LDA_plot(LDA_activity(x))
-
 }

@@ -1,0 +1,123 @@
+---
+title: "LDAcoop"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{LDAcoop}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+ - LDA: limiting dilution assay
+ - coop: short for (cellular) cooperation
+
+The LDA is the gold standard for quantification of the clonogenic capacity of 
+non-adherent cells. 
+The most common method for calculating this capacity from an LDA experiment 
+assumes implicitly independence of all cells. Interestingly, this assumption 
+does not hold for many cell lines (e.g. cooperatively growing cells). 
+Therefore, this packages equips you with the tools needed to quantify 
+clonogenic capacity of cell lines with or without cellular cooperation 
+and to quantify the clonogenic survival of those after treatment.
+
+# How to use this package (and why)
+
+Cellular cooperation induced a non-linearity to the dose-response-curve 
+((log) fraction of non-responding wells over the number of cells seeded)
+and 
+thereby biases the estimate of the gold standard analysis method, which assumes
+linearity. 
+Thus, the gold standard analysis method is semantically applicable 
+but its result might be biased (i.e. meaningless) for cooperatively growing 
+cells. 
+So, this is what this package is made for: to calculate clonogenic activity 
+and survival fractions in the absence or presence of cellular cooperation.
+
+As known from tools for quantification of the clonogenic capacity from LDA data, 
+the input is a data frame (table, matrix) with entries for 
+
+ - dose: the number of cells in a well
+ - wells: the number of wells with this dose
+ - response: the number of wells with positive response (growth)
+ - (optional) group: treatment group
+ 
+All commands to get tables with numbers or plots of the activity are explained 
+below.
+
+## Estimating Activity
+
+
+
+## Estimating Survival Fraction after Treatment
+
+
+## Introduction
+
+The basic concept for estimating the clonogenic activity of a cell line through
+diluting the number of cells in a well is the following: 
+Imagine the number of cells in a well is so high, 
+that we expect many active cells among them, then each well will be positive. 
+On the other hand, imagine a number of cells which is
+so low, that the chance of an active cell in a well is very low, then most 
+wells will be negative. 
+Thus, in between there will be some dose of cells in a well, where some wells
+are going to be positive and others negative. We are interested in this range 
+and we are looking for it by diluting the number of cells per well.
+From Poisson statistics we know, 
+that the fraction of negative wells tends to 37% just when we expect 
+precisely one active cell in the seeded dose. And this rate of '1 active cell 
+among x' is what we call clonogenic activity.
+
+Therefore, we make several experiments with different (diluted) numbers of cells
+in each well and interpolate from the dose-response-curve the number of cells, 
+where the expectation of negative wells is 37%.
+
+### Mathematically
+
+Say, for an experiment $i$ we prepare $n_i$ wells with $d_i$ cells each. 
+We assume, that each cell in a well has a certain chance $p_i$ to be 
+clonogenic (i.e. it will grow to a colony) and 
+every cell has this identical chance independently from each other.
+Thus, the number of clonogenic cells in a well is binomially distributed
+\[P(X=k) = \left( \begin{matrix} d_i \\ k \end{matrix}\right) 
+p_i^{k} (1-p_i)^{d_i-k} \]
+or asymptotically (for $n \to \infty$) Poisson distributed with 
+$\lambda_i = n_i \cdot p_i$
+\[P_{\lambda_i}(X=k) = \frac{\lambda_i^k}{k!} e^{-\lambda_i}.\]
+
+Since we know, that $P_1(0) \approx 0.368$, we estimate the probability $p_i$ 
+via a generalized linear Poisson regression model with cloglog link function, 
+which is fitted to the
+observed frequency of responding wells $r_i$ as:
+\[ log(-log(1-r_i)) = \alpha_i + \beta \cdot \delta_i.\]
+
+This model corresponds to the assumed independent case for $\beta = 1$, and 
+therefore, this is just the test for the validity of the model. 
+Because for $\beta = 1, log(a_i) = \alpha_i, log(d_i) = \delta_i$ we find
+\begin{align*}
+log(-log(1-r_i)) &= \alpha_i + \delta_i \\
+-log(1-r_i) &= a_i \cdot d_i \\
+log(1-r_i) &= - a_i d_i \\
+1-r_i &= e^{- a_i d_i}\\
+P_{\lambda}(k=0) = e^{-\lambda} 
+\end{align*}
+for $\lambda = a_i d_i$.
+We observe growth or no growth per well, thus if any of the cells in a well 
+came to growth.
+
+Some 
+number of $r_i$ wells will respond with growth.
+In each well the number is binomially distributed or approximately Poisson.
+
+
+
+```{r setup}
+library(LDAcoop)
+```
+

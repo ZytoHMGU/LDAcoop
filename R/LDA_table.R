@@ -28,7 +28,6 @@ LDA_table <- function(x,ref_class = "unknown"){
     print("p-value cooperativity")
     print(round(act$p.lin.Model,digits = 3))
     return(act)
-    break
   }
   colnames(x)[1:4] <- c("dose","wells","positive","group")
   if (!is.numeric(x$dose) | !is.numeric(x$wells) | !is.numeric(x$positive)){
@@ -38,7 +37,8 @@ LDA_table <- function(x,ref_class = "unknown"){
     ref_class <- unique(x$group)[1]
     if (ref_class != 0){
       warning(paste0("warning: reference class for survival analysis is ",
-                     ref_class,", not 0. - specifiy ref_class or reorder data!"))
+                     ref_class,
+                     ", not 0. - specifiy ref_class or reorder data!"))
     } else {
       print(" reference class is 0")
     }
@@ -74,9 +74,6 @@ LDA_table <- function(x,ref_class = "unknown"){
     show_LDA$b[i] <- a$est[2,1]
     show_LDA$"b.pvalue"[i] <- a$p.lin.Model
     s <- sf[[i-1]]
-    if (s$treat != a$treat){
-      stop(" - fatal error - groups inconsistent - please contact maintainer! ")
-    }
     show_LDA$SF[i] <- s$sf
     show_LDA$SF.CI.lb.ep[i] <- s$CI.ep[1]
     show_LDA$SF.CI.ub.ep[i] <- s$CI.ep[2]

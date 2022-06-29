@@ -17,6 +17,10 @@
 #'                 "wells" = rep(25,4),
 #'                 "positive" = c(2,5,10,20))
 #' act <- LDA_activity_single(x)
+#' data(LDAdata)
+#' cell.line <- unique(LDAdata$name)[1]
+#' x <- subset.data.frame(LDAdata, subset = (name==cell.line) & (Group == 0))
+#' LDA_activity_single(x[,1:3])
 #' @importFrom stats "predict"
 #' @export
 #'
@@ -27,6 +31,9 @@ LDA_activity_single <- function(x,
     stop("error: x must be of class data.frame or matrix")
   }
   x <- as.data.frame(x)
+  if (ncol(x) != 3){
+    stop("error: number of columns must be 3 (dose, # wells, # positive)")
+  }
   colnames(x) <- c("dose","wells","positive")
   if (!is.numeric(x$dose) | !is.numeric(x$wells) | !is.numeric(x$positive)){
     stop("error: all elements of x must be numeric")
@@ -44,7 +51,7 @@ LDA_activity_single <- function(x,
 
   single <- data.frame("dose" = rep(NA,sum(x$wells)),"positive" = NA)
   flnr <- 1
-  for (i in 1:nrow(x)){
+  for (i in seq_along(rownames(x))){
     single$dose[flnr:(flnr+x$wells[i]-1)] <- x$dose[i]
     single$positive[flnr:(flnr+x$wells[i]-1)] <-
       c(rep(1,x$positive[i]),rep(0,x$wells[i]-x$positive[i]))
@@ -53,19 +60,21 @@ LDA_activity_single <- function(x,
 
   X.glm <- data.frame("y" = single$positive,
                       "x" = log(single$dose))
-  fit.mod <- glm(y ~ x,
+  fit.mod <- suppressWarnings(glm(y ~ x,
                  family = binomial(link = "cloglog"),
-                 data = X.glm)
+                 data = X.glm,))
 
   sum.fit <- summary(fit.mod)
   est <- sum.fit$coefficients
   Sig <- sum.fit$cov.unscaled
 
-  new.data <- data.frame("x" = log((10^seq(-4,max(log10(10*x$dose)),1/10000))))
+  new.data <- data.frame("x" = log((10^seq(-4,
+                                           max(log10(10*x$dose)),
+                                           1/10000))))
   pred <- predict(object = fit.mod,
                   newdata = new.data,
                   type = "response",
-                  se.fit = T)
+                  se.fit = TRUE)
 
   # approximate activity
   d.c <-  exp(new.data$x)

@@ -29,12 +29,12 @@ LDA_survival <- function(x,name = "cell linea a"){
   act <- LDA_activity(x,name)
   ref <- act[[1]]
   sf_list <- vector(mode = "list",length = length(act)-1)
-  for (i in 1:length(sf_list)){
+  for (i in seq_along(sf_list)){
     act.0 <- ref
     act.1 <- act[[i+1]]
     sf <- LDA_survival_single(act.0 = act.0,
                               act.x = act.1)
-    sf$treatment = act.1$treatment
+    sf$treatment <- act.1$treatment
     sf_list[[i]] <- sf
   }
   return(sf_list)

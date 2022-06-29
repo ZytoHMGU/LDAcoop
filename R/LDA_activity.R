@@ -22,6 +22,7 @@ LDA_activity <- function(x,name = "LDA cells"){
     stop("error: x must be of class data.frame or matrix")
   }
   if (ncol(x) == 3){
+    warning("warning: no group variable assigned - treated as one group.")
     act <- LDA_activity_single(x,name)
   }
   if (ncol(x) > 3){
@@ -29,12 +30,12 @@ LDA_activity <- function(x,name = "LDA cells"){
     colnames(x) <- c("dose","wells","positive","group")
     groups <- unique(x$group)
     act <- vector(mode = "list",length = length(groups))
-    for (i in 1:length(groups)){
+    for (i in seq_along(groups)){
       act[[i]] <- LDA_activity_single(
         x = subset.data.frame(x = x,
                               subset = x$group == groups[i],
                               select = c("dose","wells","positive"),
-                              drop = T),name,treat = groups[i])
+                              drop = TRUE),name,treat = groups[i])
 
     }
     class(act) <- "LDA_activity_list"

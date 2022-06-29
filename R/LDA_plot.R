@@ -2,7 +2,7 @@
 #'
 #' @description plot activity from LDA data object
 #'
-#' @param LDA_act output from LDA_activity()
+#' @param LDA_act output from LDA_activity
 #'
 #' @return none
 #'
@@ -12,7 +12,6 @@
 #'                 "positive" = c(2,5,10,20,1,2,6,11),
 #'                 "group" = c(rep("A",4),rep("B",4)))
 #' LDA_plot(LDA_activity(x))
-#'
 #' @importFrom grDevices "colorRampPalette"
 #' @importFrom graphics "abline" "par" "plot" "title"
 #' @importFrom graphics "polygon"
@@ -39,11 +38,13 @@ LDA_plot <- function(LDA_act){
     x$pch <- c(1,6)[(x$ind)+1]
     x$p[x$ind] <- ((x$p*x$n-0.5)/x$n)[x$ind]
 
-    new.data <- data.frame("x" = log(seq(1/1000,exp(xlim[2]),(exp(xlim[2]))/1000)))
+    new.data <- data.frame("x" = log(seq(1/1000,
+                                         exp(xlim[2]),
+                                         (exp(xlim[2]))/1000)))
     pred <- predict(object = LDA$model,
                     newdata = new.data,
                     type = "response",
-                    se.fit = T)
+                    se.fit = TRUE)
     x.uc <- (1-(pred$fit+qnorm(1-alpha/2)*pred$se.fit))
     x.uc[x.uc<0] <- 0
     x.uc <- log(x.uc)
@@ -55,10 +56,11 @@ LDA_plot <- function(LDA_act){
          xlab = "dose [#cells]",
          pch = x$pch,col = col)
     lines(exp((new.data$x)),log(1-pred$fit),lwd=2)
-    polygon_y <- c(1-(pred$fit+1.96*pred$se.fit),rev(1-(pred$fit-1.96*pred$se.fit)))
+    polygon_y <- c(1-(pred$fit+1.96*pred$se.fit),
+                   rev(1-(pred$fit-1.96*pred$se.fit)))
     polygon_y[(polygon_y <= 0)] <- NaN
     polygon_y <- log(polygon_y)
-    polygon_y[is.nan(polygon_y)] <- min(polygon_y,na.rm = T)
+    polygon_y[is.nan(polygon_y)] <- min(polygon_y,na.rm = TRUE)
     polygon(x = c(exp(new.data$x),rev(exp(new.data$x))),
             y = polygon_y,
             col = rgb(0.2,0.2,0.2,0.2,1))
@@ -68,7 +70,7 @@ LDA_plot <- function(LDA_act){
   }
 
   if (identical(class(LDA_act),"LDA_activity_object")){
-    plot_single(LDA_act,col = "#43E08700")
+    plot_single(LDA_act)
     title(paste0(LDA_act$name," ",LDA_act$treatment))
   }
   if (identical(class(LDA_act),"LDA_activity_list")){
