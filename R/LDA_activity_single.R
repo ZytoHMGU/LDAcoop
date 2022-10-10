@@ -1,19 +1,19 @@
 #' @title LDA_activity_single
 #'
 #' @description calculation of activity in a block of LDA data
-#'   (i.e. dose, number of wells, number of positive wells).
+#'   (i.e. numbers of: cells seeded, wells, positive wells).
 #'
-#' @param x numeric data.frame or matrix with three columns (dose, number of
-#'   wells, number of positive wells)
+#' @param x numeric data.frame or matrix with three columns (cells,
+#'   wells, positive wells)
 #' @param name optional: experiment name (e.g. name of cell line)
-#' @param xtreat optional: treatment
+#' @param xtreat optional: treatment (e.g. irradiation dose in Gy)
 #'
 #' @return list object with estimated activity, 95%-confidence interval,
 #'   84%-confidence interval, estimated parameters, corresponding covariance
 #'   matrix, fit-object and p-value for non-cooperativity-test
 #'
 #' @examples
-#' x <- data.frame("dose" = c(10,50,100,250),
+#' x <- data.frame("cells" = c(10,50,100,250),
 #'                 "wells" = rep(25,4),
 #'                 "positive" = c(2,5,10,20))
 #' act <- LDA_activity_single(x)
@@ -32,44 +32,44 @@ LDA_activity_single <- function(x,
   }
   x <- as.data.frame(x)
   if (ncol(x) != 3){
-    stop("error: number of columns must be 3 (dose, # wells, # positive)")
+    stop("error: number of columns must be 3 (cells, wells, positive)")
   }
-  colnames(x) <- c("dose","wells","positive")
-  if (!is.numeric(x$dose) | !is.numeric(x$wells) | !is.numeric(x$positive)){
+  colnames(x) <- c("cells","wells","positive")
+  if (!is.numeric(x$cells) | !is.numeric(x$wells) | !is.numeric(x$positive)){
     stop("error: all elements of x must be numeric")
   }
   if (min(x) < 0){
     stop("error: x must be non-negative")
   }
-  if (min(x$dose) == 0){
-    stop("error: dose must be positive")
+  if (min(x$cells) == 0){
+    stop("error: cells must be positive")
   }
   if (min(x$wells - x$positive) < 0){
     stop("error: number of wells must not be smaller than
          number of positive wells")
   }
 
-  single <- data.frame("dose" = rep(NA,sum(x$wells)),"positive" = NA)
+  single <- data.frame("cells" = rep(NA,sum(x$wells)),"positive" = NA)
   flnr <- 1
   for (i in seq_along(rownames(x))){
-    single$dose[flnr:(flnr+x$wells[i]-1)] <- x$dose[i]
+    single$cells[flnr:(flnr+x$wells[i]-1)] <- x$cells[i]
     single$positive[flnr:(flnr+x$wells[i]-1)] <-
       c(rep(1,x$positive[i]),rep(0,x$wells[i]-x$positive[i]))
     flnr <- flnr + x$wells[i]
   }
 
   X.glm <- data.frame("y" = single$positive,
-                      "x" = log(single$dose))
+                      "x" = log(single$cells))
   fit.mod <- suppressWarnings(glm(y ~ x,
                  family = binomial(link = "cloglog"),
-                 data = X.glm,))
+                 data = X.glm))
 
   sum.fit <- summary(fit.mod)
   est <- sum.fit$coefficients
   Sig <- sum.fit$cov.unscaled
 
   new.data <- data.frame("x" = log((10^seq(-4,
-                                           max(log10(10*x$dose)),
+                                           max(log10(10*x$cells)),
                                            1/10000))))
   pred <- predict(object = fit.mod,
                   newdata = new.data,

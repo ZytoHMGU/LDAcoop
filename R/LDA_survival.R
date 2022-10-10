@@ -1,16 +1,16 @@
 #' @title LDA_survival
 #'
 #' @description calculation of clonogenic survival in a table of LDA data
-#'   (i.e. dose, number of wells, number of positive wells, group).
+#'   (i.e. cells, wells, positive wells, group).
 #'
-#' @param x numeric data.frame or matrix with three columns (dose, number of
-#'   wells, number of positive wells, group (optional))
+#' @param x numeric data.frame or matrix with three columns (cells,
+#'   wells, positive wells, group)
 #' @param name optional: experiment name (e.g. name of cell line)
 #'
 #' @return list object with LDA-activities as returned by LDA_activity_single
 #'
 #' @examples
-#' x <- data.frame("dose" = c(10,50,100,250,10,50,100,250),
+#' x <- data.frame("cells" = c(10,50,100,250,10,50,100,250),
 #'                 "wells" = rep(25,8),
 #'                 "positive" = c(2,5,10,20,1,2,6,11),
 #'                 "group" = c(rep("A",4),rep("B",4)))

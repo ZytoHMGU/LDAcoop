@@ -10,10 +10,10 @@
 #'   by combination of 84%-uncertainty-intervals of activity estimates)
 #'
 #' @examples
-#' x.a <- data.frame("dose" = c(10,50,100,250),
+#' x.a <- data.frame("cells" = c(10,50,100,250),
 #'                 "wells" = rep(25,4),
 #'                 "positive" = c(2,5,10,20))
-#' x.b <- data.frame("dose" = c(10,50,100,250),
+#' x.b <- data.frame("cells" = c(10,50,100,250),
 #'                 "wells" = rep(25,4),
 #'                 "positive" = c(1,2,6,11))
 #' act.a <- LDA_activity_single(x.a)
@@ -52,5 +52,6 @@ LDA_survival_single <- function(act.0,act.x){
 
   result$CI.act <- c(act.0$CI.appr.SF[1]/act.x$CI.appr.SF[2],
                      act.0$CI.appr.SF[2]/act.x$CI.appr.SF[1])
+  # see Schenker, Austin, Payton, Knol, etc.
   return(result)
 }

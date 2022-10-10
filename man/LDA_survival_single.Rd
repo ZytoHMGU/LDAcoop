@@ -20,10 +20,18 @@ list object with survival fraction, estimated confidence intervals
 calculate clonogenic survival fraction from LDA_activity objects
 }
 \examples{
-x <- data.frame("dose" = c(10,50,100,250,10,50,100,250),
-                "wells" = rep(25,8),
-                "positive" = c(2,5,10,20,1,2,6,11),
-                "group" = c(rep("A",4),rep("B",4)))
-act <- LDA_activity(x)
-sf <- LDA_survival(act)
+x.a <- data.frame("cells" = c(10,50,100,250),
+                "wells" = rep(25,4),
+                "positive" = c(2,5,10,20))
+x.b <- data.frame("cells" = c(10,50,100,250),
+                "wells" = rep(25,4),
+                "positive" = c(1,2,6,11))
+act.a <- LDA_activity_single(x.a)
+act.b <- LDA_activity_single(x.b)
+sf <- LDA_survival_single(act.0 = act.a,act.x = act.b)
+data(LDAdata)
+cell.line <- unique(LDAdata$name)[1]
+x <- subset.data.frame(LDAdata, subset = (name==cell.line) & (Group < 2))
+act <- LDA_activity(x[,1:4])
+sf <- LDA_survival_single(act.0 = act[[1]],act.x = act[[2]])
 }

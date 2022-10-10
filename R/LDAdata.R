@@ -7,8 +7,8 @@
 #'
 #' @usage data(LDAdata)
 #'
-#' @format data.frame with columns: "S-value", "# Tested", "# Clonal growth",
-#'  "Group", "name", "replicate"
+#' @format data.frame with columns: "name", "replicate", "Group", "S-value",
+#' "# Tested", "# Clonal growth"
 #'
 #' @keywords datasets
 #'

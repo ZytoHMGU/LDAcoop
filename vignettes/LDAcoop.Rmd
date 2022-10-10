@@ -15,109 +15,329 @@ knitr::opts_chunk$set(
 ```
 
  - LDA: limiting dilution assay
- - coop: short for (cellular) cooperation
+ - coop: (cellular) cooperation
 
 The LDA is the gold standard for quantification of the clonogenic capacity of 
 non-adherent cells. 
 The most common method for calculating this capacity from an LDA experiment 
 assumes implicitly independence of all cells. Interestingly, this assumption 
-does not hold for many cell lines (e.g. cooperatively growing cells). 
-Therefore, this packages equips you with the tools needed to quantify 
+does not hold for many cell lines (i.e. cooperatively growing cells). 
+Therefore, this package equips you with the tools you need to quantify 
 clonogenic capacity of cell lines with or without cellular cooperation 
-and to quantify the clonogenic survival of those after treatment.
+and to quantify the clonogenic survival of those cell lines after treatment.
 
-# How to use this package (and why)
+# How to use this package
 
-Cellular cooperation induced a non-linearity to the dose-response-curve 
-((log) fraction of non-responding wells over the number of cells seeded)
+Cellular cooperation induces a non-linearity to the dose-response-curve 
+(the (log) fraction of non-responding wells over the number of cells seeded)
 and 
 thereby biases the estimate of the gold standard analysis method, which assumes
 linearity. 
 Thus, the gold standard analysis method is semantically applicable 
-but its result might be biased (i.e. meaningless) for cooperatively growing 
+but its result are biased (i.e. meaningless) for cooperatively growing 
 cells. 
-So, this is what this package is made for: to calculate clonogenic activity 
-and survival fractions in the absence or presence of cellular cooperation.
+This is what this package is made for: to calculate clonogenic activity 
+and survival fractions in the presence (or absence) of cellular cooperation.
 
 As known from tools for quantification of the clonogenic capacity from LDA data, 
 the input is a data frame (table, matrix) with entries for 
 
- - dose: the number of cells in a well
- - wells: the number of wells with this dose
+ - cells: the number of cells seeded in a well
+ - wells: the number of replicate wells
  - response: the number of wells with positive response (growth)
- - (optional) group: treatment group
+ - (optional) group: treatment group - e.g. irradiation dose
  
 All commands to get tables with numbers or plots of the activity are explained 
 below.
 
-## Estimating Activity
+## A full experiment
 
+Let's assume, you have conducted an experiment with a set of experimental 
+conditions and biological replicates.
 
+Your data will look something like this
 
-## Estimating Survival Fraction after Treatment
+```{r setup}
+#install.packages("LDAcoop")
+library(LDAcoop)
+data(LDAdata)
+head(LDAdata)
+```
 
+A table of clonogenic activities, cooperatvity coefficients and survival 
+fractions can be generated from a data table as just described
+
+```{r data.table}
+T47D <- subset.data.frame(x = LDAdata,
+                          subset = name == "T47D")
+T47D <- T47D[,c("S-value","# Tested","# Clonal growth","Group","replicate")]
+LDA_tab_out <- LDA_table(x = T47D,ref_class = 0)
+round(LDA_tab_out,digits = 3)
+```
+
+In this table, we find 
+
+ - `treatment`: the experimental 'Group' 
+ - `act`: the calculated activity for the treatment
+ - `act.CI.lb` and `act.CI.ub`: its uncertainty (lower and upper bound of the 
+ 95%-confidence interval)
+ - `b`: the cooperativity coefficient (1: no cooperativity)
+ - `b.pvalue`: the p-value for test hypothesis of b=1
+ - `SF`: the calculated survival fraction (SF)
+ - `SF.CI.lb` and `SF.CI.ub`: SF-uncertainty (lb: lower bound, ub: upper bound)
+ 
+A plot of the experiment and the estimated survival fractions can be generated
+as follows:
+
+```{r data.plot,fig.width=6, fig.height=4}
+LDA_plot(LDA_tab = T47D,uncertainty.band = T)
+```
+
+In case the figure looks overcrowded, `uncertainty.band = FALSE` can switch off
+the confidence bands and `xlim` (e.g. `xlim = c(0,100)`) can be used, to adjust
+the plotted range of seeded cells.
+
+An example of cooperatively growing cells is cell line BT20 (see `CFAcoop`).
+
+```{r setup.BT20,fig.width=6, fig.height=4}
+BT20 <- subset.data.frame(x = LDAdata,
+                          subset = name == "BT.20")
+BT20 <- BT20[,c("S-value","# Tested","# Clonal growth","Group","replicate")]
+LDA_table(x = BT20)
+LDA_plot(LDA_tab = BT20,uncertainty.band = T)
+```
+
+---
+
+# Mathematical background and stepwise calculation 
 
 ## Introduction
 
-The basic concept for estimating the clonogenic activity of a cell line through
-diluting the number of cells in a well is the following: 
-Imagine the number of cells in a well is so high, 
-that we expect many active cells among them, then each well will be positive. 
-On the other hand, imagine a number of cells which is
-so low, that the chance of an active cell in a well is very low, then most 
-wells will be negative. 
-Thus, in between there will be some dose of cells in a well, where some wells
-are going to be positive and others negative. We are interested in this range 
-and we are looking for it by diluting the number of cells per well.
-From Poisson statistics we know, 
-that the fraction of negative wells tends to 37% just when we expect 
-precisely one active cell in the seeded dose. And this rate of '1 active cell 
-among x' is what we call clonogenic activity.
+Clonogenicity refers to the capacity of single cells to grow into 
+new colonies. 
+Since not every single cell has got this potential, in a given culture the 
+fraction of cells that share this capacity is often of interest. 
+This fraction is then called clonogenic activity.
+Mathematically it is a probability $p$.
+Often the activity is communicated by the reciprocal, which corresponds to a 
+number of cells (e.g. activity $p = 1/42$ written as $42$ for 
+'one active cell among $42$ non-active cells').
 
-Therefore, we make several experiments with different (diluted) numbers of cells
-in each well and interpolate from the dose-response-curve the number of cells, 
-where the expectation of negative wells is 37%.
+In the LDA, distinct numbers of cells are seeded in wells. The number of 
+seeded cells per well is often called dose.
+Since, we do not want to confuse with the irradiation dose, which is a frequent 
+treatment, in the field of radiation oncology, we note the number of cells
+seeded with $s$. 
+The readout of each well in the LDA is dichotomous (growth / no growth).
+So, from the binomially distributed number of active cells in a well $X$ where
 
-### Mathematically
+\[P(X=k) = \left( \begin{matrix} s \\ k \end{matrix}\right) 
+p^{k} (1-p)^{s-k} \]
 
-Say, for an experiment $i$ we prepare $n_i$ wells with $d_i$ cells each. 
-We assume, that each cell in a well has a certain chance $p_i$ to be 
-clonogenic (i.e. it will grow to a colony) and 
-every cell has this identical chance independently from each other.
-Thus, the number of clonogenic cells in a well is binomially distributed
-\[P(X=k) = \left( \begin{matrix} d_i \\ k \end{matrix}\right) 
-p_i^{k} (1-p_i)^{d_i-k} \]
-or asymptotically (for $n \to \infty$) Poisson distributed with 
-$\lambda_i = n_i \cdot p_i$
-\[P_{\lambda_i}(X=k) = \frac{\lambda_i^k}{k!} e^{-\lambda_i}.\]
+only $X=0$ and $X \neq 0$ can be observed experimentally.
+Thus, it is about the frequency of positive wells as a function of cell number.
+For dealing with high cell numbers, the binomial distribution is approximated 
+by the 
+asymptotically identical (for $s \to \infty$) Poisson distribution (with 
+$\lambda = s \cdot p$):
+\[P_{\lambda}(X=k) = \frac{\lambda^k}{k!} e^{-\lambda}.\]
 
-Since we know, that $P_1(0) \approx 0.368$, we estimate the probability $p_i$ 
-via a generalized linear Poisson regression model with cloglog link function, 
-which is fitted to the
-observed frequency of responding wells $r_i$ as:
-\[ log(-log(1-r_i)) = \alpha_i + \beta \cdot \delta_i.\]
+The basic concept for estimating the clonogenic activity of a cell suspension 
+through diluting the number of cells in different wells is the following: 
 
-This model corresponds to the assumed independent case for $\beta = 1$, and 
-therefore, this is just the test for the validity of the model. 
-Because for $\beta = 1, log(a_i) = \alpha_i, log(d_i) = \delta_i$ we find
+ - imagine a number of cells in a well, which is so high, 
+that we expect many active cells among them, then this well will be positive. 
+ - imagine a number of cells so low, 
+that the chance of an active cell among them is very low, then this well
+will be negative.
+ - thus, in between there will be cell numbers, where no-one can 
+ say, whether a colony will grow or not. It is rather a matter of chance.
+ - from Poisson statistics we know, that at an average number of one active cell
+per well ($\lambda = s \cdot p = 1$), we will find 37% negative wells.
+
+So taking the observed fractions of positive wells over the number of 
+cells per well, one just needs to find the number of cells (x-axis), 
+that results in a fraction of 37% negative wells (y-axis) and this is the 
+clonogenic activity.
+
+## Mathematical model
+
+Let $n$ be the number of wells and $\mu$ the expected fraction of positive 
+wells following the single-hit Poisson model (SHPM):
+
+\[\mu = 1-e^{-ps}\]
+
+The number of failures
+$r$ is again binomially distributed
+
+\[ P(Y=r) = \left( \begin{matrix} n \\ r \end{matrix}\right) 
+(1-\mu)^{r} \mu^{n-r}. \]
+
+We find (for $\alpha = log(p)$, $\xi = log(s)$)
+
 \begin{align*}
-log(-log(1-r_i)) &= \alpha_i + \delta_i \\
--log(1-r_i) &= a_i \cdot d_i \\
-log(1-r_i) &= - a_i d_i \\
-1-r_i &= e^{- a_i d_i}\\
-P_{\lambda}(k=0) = e^{-\lambda} 
+P_{\lambda}(k=0) &= e^{-\lambda}\\
+\Leftrightarrow 1-\mu &= e^{- p s}\\
+\Leftrightarrow log(1-\mu) &= - p s \\
+\Leftrightarrow -log(1-\mu) &= p \cdot s \\ 
+\Leftrightarrow log(-log(1-\mu)) &= \alpha + \xi 
 \end{align*}
-for $\lambda = a_i d_i$.
-We observe growth or no growth per well, thus if any of the cells in a well 
-came to growth.
 
-Some 
-number of $r_i$ wells will respond with growth.
-In each well the number is binomially distributed or approximately Poisson.
+Therefore, technically the identification of the required number of cells is 
+done via a generalized linear regression model 
+(binomial family, cloglog link function).
+The clonogenic activity is $p = e^{\alpha}$.
 
+### Cooperativity
 
+In the presented model, $p$ is independent from $s$.
+So implicitly, it is assumed, that 100 single cells in single wells have the 
+identical chance to result in at least one colony as a single well with those 
+100 cells would have. 
 
-```{r setup}
-library(LDAcoop)
+But this is often not the case.
+Cells export and import substances into the medium and thereby 
+communicate and cooperate.
+The combined chance of a group of cells often exceeds the 
+sum of the individual chances. 
+(See CFAcoop, for a number of cells seeded $S$ and a number of resulting 
+colonies $C$ we find $C = a \cdot S^b$.)
+
+Thus, allowing for the same communication and cooperativity, we replace 
+$\lambda = p \cdot s$ with $\lambda = p \cdot s^b$ analogue to CFA.
+The modification reads in both cases as 'a number of $s$ cells shows the same 
+activity as if they were $s^b$ single cells'.
+
+With this generalization we find 
+
+\begin{align*}
+P_{\lambda}(k=0) &= e^{-\lambda}\\
+\Leftrightarrow 1-\mu &= e^{- p s^b}\\
+\Leftrightarrow log(1-\mu) &= - p s^b \\
+\Leftrightarrow log(-log(1-\mu)) &= \alpha + \xi \cdot b. 
+\end{align*}
+
+Interestingly, this equation is the same as in the special case of 
+non-cooperativity, just without the restriction of $b=1$, which corresponds to 
+the non-cooperative case. 
+The degree of cooperativity is quantified by the coefficient $b$. 
+
+## Activity
+
+When the probability of a cell to grow into a colony is not 
+independent from the number of surrounding cells but rather a function of 
+this number, the earlier definition of clonogenic activity seems pointless. 
+
+Nonetheless, for a fixed outcome of $\lambda = 1$, which is equivalent with 
+$\mu \approx 0.63$, we can calculate the required number of cells seeded and 
+conclude that on 
+average, one out of these cells will grow into a colony.
+
+\begin{align*}
+\lambda = 1 &= p \cdot s(\lambda = 1)^b\\
+\Leftrightarrow 0 &= log(p) + b \cdot log(s(\lambda = 1)) \\
+\Leftrightarrow s(\lambda = 1) &= exp\left(\frac{-log(p)}{b} \right) = p^{\frac{-1}{b}}
+\end{align*}
+
+So the approach to deal with cooperatively growing cells, requires a 
+generalized definition for clonogenic activity.
+This is analogue to the CFA approach for cellular cooperation. 
+In particular, the non-cooperative case
+results in identical values as from the previous definition.
+
+```{r single.first,fig.width=6, fig.height=3}
+cell.line <- unique(LDAdata$name)[2]
+AD <- subset.data.frame(LDAdata, subset = (name==cell.line) & 
+                         (replicate==1) & (Group == 2))[,4:6]
+LDA_plot(LDA_tab = AD,uncertainty = "ep", uncertainty.band = T)
+LDAtab <- LDA_table(x = AD)
 ```
 
+In case, there are biological replicates, the replicate may be indicated by 
+the fifth column. Thereby the frequency of responding wells can be plotted 
+separately.
+
+```{r set1, fig.width=6, fig.height=3}
+AD <- subset.data.frame(LDAdata, subset = (name==cell.line) &
+                         (Group == 2))[,c(4:6,3,2)]
+LDA_plot(LDA_tab = AD,uncertainty = "ep", uncertainty.band = T)
+LDAtab <- LDA_table(x = AD[,1:3],ref_class = 0)
+```
+
+Please note that the starting motivation of a concept 'one active cell among 
+how many?' is still the same. It is just restricted to the special outcome of 
+37% negative wells. 
+The choice of 'outcome of 37% negative wells' is quite artificial and the 
+activity for higher or lower active well ratios would change. 
+But when it comes to survival fractions, this shift is mostly cutted out and 
+thereby this approach filters a cooperativity-bias in those survival fractions.
+
+## Survival fraction
+
+Even though the concept of clonogenic activity is somewhat fuzzy in the presence
+of cellular cooperation, the effect of treatments on this clonogenic capacity
+can be investigated quite accurately by the same way, it is done for the CFA.
+
+The only requirement is a statement on the outcome of interest. At CFA, a 
+number of 20 colonies can bee agreed upon - and a comparison of the number of
+required cells seeded with and without treatment is reasonable.
+
+Analogously, the ratio of cell numbers required to observe the same $\mu$ 
+(e.g. $\mu = 1-e^{-1}$) is of interest, when investigating the effect of 
+certain treatments. 
+
+\[SF_x = \frac{s_0(\lambda_0 = 1)}{s_x(\lambda_x = 1)}\]
+
+which can be calculated from the GLMs as 
+\[SF_x = exp\left( \frac{log(p_x)}{b_x} - \frac{log(p_0)}{b_0}\right)\]
+
+## Uncertainty analysis
+
+Uncertainties for the parameters of the generalized linear model are returned
+by the fitting procedure and can be transferred to the clonogenic activity 
+via the `predict` function.
+
+Uncertainties of the survival fractions can be assessed by two ways
+
+ - calculation by the law of error propagation through first order Taylor 
+ series expansion (method (a))
+ - robust approximation of by combination of the 84%-confidence-intervals of 
+ the activity (method (b))
+ 
+In cases of extreme cooperativity, method (a) might get 
+numerically unstable and therefore we recommend method (b) in those cases. 
+Even though (b) seems to work pretty well in all observed examples, (a) is to be 
+preferred if applicable, since it is the straightforward way to calculate 
+uncertainties of estimates from non-linear functions.
+Nonetheless, for robust package performance - method (b) is the default.
+
+### error propagation
+
+First-order Taylor series expansion (for $g = log(SF)$ with $\alpha = log(p)$):
+
+\[ \sigma_g^2 \approx \frac{1}{b_0^2} z_0 \Sigma_0 z_0^T +
+   \frac{1}{b_x^2} z_x \Sigma_x z_x^T  \]
+with \[ 
+z_{\nu} = \left(\begin{matrix}1 & \frac{-\alpha_{\nu}}{b_{\nu}}\end{matrix}\right)
+\]
+and
+\[\Sigma_{\nu} = \left(\begin{matrix}
+\sigma_{\alpha_{\nu}}^2 & \sigma_{\alpha_{\nu} b_{\nu}}\\
+\sigma_{\alpha_{\nu} b_{\nu}} & \sigma_{b_{\nu}}^2
+\end{matrix} \right)\]
+
+### robust combination
+
+In case of extreme cooperativity, the fitting procedure might get numerically 
+unstable and return unfeasible covariance matrices of the model parameters.
+
+In this case, we recommend to combine the 83% confidence intervals for the 
+clonogenic activities and thereby approximate the uncertainty of the survival 
+fractions. (See Austin et al. (2002), Payton et al. (2003), Knol et al. (2011))
+
+### Examples
+
+```{r BT20ep}
+LDA_table(x = BT20,uncertainty = "ep")
+LDA_table(x = BT20,uncertainty = "act")
+```

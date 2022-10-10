@@ -4,11 +4,17 @@
 \alias{LDA_table}
 \title{LDA_table}
 \usage{
-LDA_table(x, ref_class = "unknown")
+LDA_table(x, ref_class = "unknown", uncertainty = "act")
 }
 \arguments{
-\item{x}{numeric data.frame or matrix with at least three columns (dose,
-number of wells, number of positive wells, group (optional))}
+\item{x}{numeric data.frame or matrix with at least three columns (cells,
+wells, positive wells, group (optional))}
+
+\item{ref_class}{name of reference class for calculation of SF values}
+
+\item{uncertainty}{method for calculating the SF uncertainty bands ("act"
+(default) for combining the activity confidence intervals; "ep" for error
+propagation via first order Taylor series expansion.)}
 }
 \value{
 table
@@ -18,7 +24,7 @@ show table with activities and clonogenic survival from LDA data
   object
 }
 \examples{
-x <- data.frame("dose" = c(10,50,100,250,10,50,100,250),
+x <- data.frame("cells" = c(10,50,100,250,10,50,100,250),
                 "wells" = rep(25,8),
                 "positive" = c(2,5,10,20,1,2,6,11),
                 "group" = c(rep("A",4),rep("B",4)))

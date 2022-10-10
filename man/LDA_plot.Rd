@@ -4,21 +4,26 @@
 \alias{LDA_plot}
 \title{LDA_plot}
 \usage{
-LDA_plot(LDA_act)
+LDA_plot(LDA_tab, uncertainty = "ep", xlim = NULL, uncertainty.band = FALSE)
 }
 \arguments{
-\item{LDA_act}{output from LDA_activity}
+\item{LDA_tab}{LDA data.frame
+("cells", "wells", "positive", "group", "replicate")}
 }
 \value{
 none
 }
 \description{
-plot activity from LDA data object
+plot activity from LDA data
 }
 \examples{
-x <- data.frame("dose" = c(10,50,100,250,10,50,100,250),
-                "wells" = rep(25,8),
-                "positive" = c(2,5,10,20,1,2,6,11),
-                "group" = c(rep("A",4),rep("B",4)))
-LDA_plot(LDA_activity(x))
+x <- data.frame("cells" = rep(c(10,50,100,250),times = 4),
+                "wells" = rep(25,16),
+                "positive" = c(2,5,10,20,1,2,6,11,3,4,8,22,1,1,7,12),
+                "group" = rep(c(rep("A",4),rep("B",4)),times = 2),
+                "replicate" = c(rep(1,8),rep(2,8)))
+LDA_plot(x)
+data(LDAdata)
+Z1 <- subset.data.frame(LDAdata,subset = name == unique(LDAdata$name)[1])
+LDA_plot(Z1[,c("S-value","# Tested","# Clonal growth","Group","replicate")])
 }

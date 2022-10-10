@@ -7,12 +7,12 @@
 LDA_activity_single(x, name = "cell line a", treat = "no")
 }
 \arguments{
-\item{x}{numeric data.frame or matrix with three columns (dose, number of
-wells, number of positive wells)}
+\item{x}{numeric data.frame or matrix with three columns (cells,
+wells, positive wells)}
 
 \item{name}{optional: experiment name (e.g. name of cell line)}
 
-\item{xtreat}{optional: treatment}
+\item{xtreat}{optional: treatment (e.g. irradiation dose in Gy)}
 }
 \value{
 list object with estimated activity, 95%-confidence interval,
@@ -21,11 +21,15 @@ list object with estimated activity, 95%-confidence interval,
 }
 \description{
 calculation of activity in a block of LDA data
-  (i.e. dose, number of wells, number of positive wells).
+  (i.e. numbers of: cells seeded, wells, positive wells).
 }
 \examples{
-x <- data.frame("dose" = c(10,50,100,250),
+x <- data.frame("cells" = c(10,50,100,250),
                 "wells" = rep(25,4),
                 "positive" = c(2,5,10,20))
 act <- LDA_activity_single(x)
+data(LDAdata)
+cell.line <- unique(LDAdata$name)[1]
+x <- subset.data.frame(LDAdata, subset = (name==cell.line) & (Group == 0))
+LDA_activity_single(x[,1:3])
 }

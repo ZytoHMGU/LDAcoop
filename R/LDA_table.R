@@ -3,20 +3,24 @@
 #' @description show table with activities and clonogenic survival from LDA data
 #'   object
 #'
-#' @param x numeric data.frame or matrix with at least three columns (dose,
-#'   number of wells, number of positive wells, group (optional))
+#' @param x numeric data.frame or matrix with at least three columns (cells,
+#'   wells, positive wells, group (optional))
+#' @param ref_class name of reference class for calculation of SF values
+#' @param uncertainty method for calculating the SF uncertainty bands ("act"
+#'   (default) for combining the activity confidence intervals; "ep" for error
+#'   propagation via first order Taylor series expansion.)
 #'
 #' @return table
 #'
 #' @examples
-#' x <- data.frame("dose" = c(10,50,100,250,10,50,100,250),
+#' x <- data.frame("cells" = c(10,50,100,250,10,50,100,250),
 #'                 "wells" = rep(25,8),
 #'                 "positive" = c(2,5,10,20,1,2,6,11),
 #'                 "group" = c(rep("A",4),rep("B",4)))
 #' LDA_table(x)
 #' @export
 #'
-LDA_table <- function(x,ref_class = "unknown"){
+LDA_table <- function(x,ref_class = "unknown",uncertainty = "act"){
   if (ncol(x)==3){
     act <- LDA_activity_single(x = x)
     print("activity^-1 [N]")
@@ -29,8 +33,8 @@ LDA_table <- function(x,ref_class = "unknown"){
     print(round(act$p.lin.Model,digits = 3))
     return(act)
   }
-  colnames(x)[1:4] <- c("dose","wells","positive","group")
-  if (!is.numeric(x$dose) | !is.numeric(x$wells) | !is.numeric(x$positive)){
+  colnames(x)[1:4] <- c("cells","wells","positive","group")
+  if (!is.numeric(x$cells) | !is.numeric(x$wells) | !is.numeric(x$positive)){
     stop("error: all elements of x must be numeric")
   }
   if (ref_class == "unknown"){
@@ -54,10 +58,8 @@ LDA_table <- function(x,ref_class = "unknown"){
                          "b" = NA,
                          "b.pvalue" = NA,
                          "SF" = NA,
-                         "SF.CI.lb.ep" = NA,
-                         "SF.CI.ub.ep" = NA,
-                         "SF.CI.lb.act" = NA,
-                         "SF.CI.ub.act" = NA)
+                         "SF.CI.lb" = NA,
+                         "SF.CI.ub" = NA)
   a <- act[[1]]
   show_LDA$treatment[1] <- ref_class
   show_LDA$act[1] <- a$act
@@ -75,10 +77,15 @@ LDA_table <- function(x,ref_class = "unknown"){
     show_LDA$"b.pvalue"[i] <- a$p.lin.Model
     s <- sf[[i-1]]
     show_LDA$SF[i] <- s$sf
-    show_LDA$SF.CI.lb.ep[i] <- s$CI.ep[1]
-    show_LDA$SF.CI.ub.ep[i] <- s$CI.ep[2]
-    show_LDA$SF.CI.lb.act[i] <- s$CI.act[1]
-    show_LDA$SF.CI.ub.act[i] <- s$CI.act[2]
+    switch(uncertainty,
+           "act" = {
+             show_LDA$SF.CI.lb[i] <- s$CI.act[1]
+             show_LDA$SF.CI.ub[i] <- s$CI.act[2]
+           },
+           "ep" = {
+             show_LDA$SF.CI.lb[i] <- s$CI.ep[1]
+             show_LDA$SF.CI.ub[i] <- s$CI.ep[2]
+           })
   }
   return(show_LDA)
 }

@@ -5,8 +5,8 @@
 \alias{LDAdata}
 \title{LDA data from a set of cell lines}
 \format{
-data.frame with columns: "S-value", "# Tested", "# Clonal growth",
- "Group", "name", "replicate"
+data.frame with columns: "name", "replicate", "Group", "S-value",
+"# Tested", "# Clonal growth"
 }
 \usage{
 data(LDAdata)
