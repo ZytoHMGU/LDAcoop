@@ -76,22 +76,20 @@ LDA_activity_single <- function(x,
                   type = "response",
                   se.fit = TRUE)
 
-  # approximate activity
-  d.c <-  exp(new.data$x)
-  x.est.1 <- d.c[which(log(1-(pred$fit))<(-1))[1]]
-  x.est.0 <- d.c[(which(log(1-(pred$fit))<(-1))[1])-1]
-  x.est <- (x.est.0+x.est.1)/2
-  rm(x.est.0,x.est.1)
+  x.est <- exp(-est[1,1]/est[2,1])
   # approximate 95% confidence interval
+  d.c <-  exp(new.data$x)
   calc_act_CI <- function(pred, alpha){
     x.uc <- (1-(pred$fit+qnorm(1-alpha/2)*pred$se.fit))
     x.uc[x.uc<0] <- 0
     x.uc <- log(x.uc)
     x.lc <- log(1-(pred$fit+qnorm(alpha/2)*pred$se.fit))
+
     x.lb.1 <- d.c[which(x.lc<(-1))[1]]
     x.lb.0 <- d.c[(which(x.lc<(-1))[1])-1]
     x.lb <- (x.lb.0+x.lb.1)/2
     rm(x.lb.0,x.lb.1)
+
     x.ub.1 <- d.c[which(x.uc<(-1))[1]]
     x.ub.0 <- d.c[(which(x.uc<(-1))[1])-1]
     x.ub <- (x.ub.0+x.ub.1)/2
