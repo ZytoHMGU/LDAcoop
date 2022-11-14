@@ -166,7 +166,7 @@ LDA_prepare_plot <- function(LDA_tab,
       "sf.msd" = 1,
       "sf.psd" = 1,
       "un.type" = uncertainty,
-      "col" = colhex[1],
+      "col" = NA,
       "sf.msd.ep" = 1,
       "sf.psd.ep" = 1
     )
@@ -177,9 +177,10 @@ LDA_prepare_plot <- function(LDA_tab,
                                 CurSF$sf,
                                 CurSF[[4]],
                                 uncertainty,
-                                colhex[t+1],
+                                NA,
                                 CurSF[[3]]))
     }
+    out_SF$col <- colhex
     out_SF[,2] <- as.numeric(out_SF[,2])
     out_SF[,3] <- as.numeric(out_SF[,3])
     out_SF[,4] <- as.numeric(out_SF[,4])
