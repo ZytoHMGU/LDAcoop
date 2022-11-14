@@ -16,7 +16,7 @@
 #' LDA_plot_SF(out[[2]])
 #' data(LDAdata)
 #' Z1 <- subset.data.frame(LDAdata,subset = name == unique(LDAdata$name)[1])
-#' out <- LDA_prepare<- plot(Z1[,c("S-value","# Tested","# Clonal growth",
+#' out <- LDA_prepare_plot(Z1[,c("S-value","# Tested","# Clonal growth",
 #'                                 "Group","replicate")])
 #' LDA_plot_SF(out[[2]])
 #' @importFrom graphics "plot" "title"
