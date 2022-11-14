@@ -2,7 +2,7 @@
 % Please edit documentation in R/LDA_survival_single.R
 \name{LDA_survival_single}
 \alias{LDA_survival_single}
-\title{LDA_suvival_single}
+\title{LDA_survival_single}
 \usage{
 LDA_survival_single(act.0, act.x)
 }

@@ -17,7 +17,7 @@ wells, positive wells)}
 \value{
 list object with estimated activity, 95%-confidence interval,
   84%-confidence interval, estimated parameters, corresponding covariance
-  matrix, fit-object and p-value for non-cooperativity-test
+  matrix, fit-object and p-value for cooperativity-test
 }
 \description{
 calculation of activity in a block of LDA data
