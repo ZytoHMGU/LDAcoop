@@ -4,7 +4,7 @@
 \alias{LDA_prepare_plot}
 \title{LDA_prepare_plot}
 \usage{
-LDA_prepare_plot(LDA_tab, uncertainty = "ep")
+LDA_prepare_plot(LDA_tab, uncertainty = "act")
 }
 \arguments{
 \item{LDA_tab}{LDA data.frame

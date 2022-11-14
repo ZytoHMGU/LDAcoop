@@ -5,7 +5,7 @@ test_that("format", {
   expect_equal(class(LDA_activity_single(x[,4:6])), "LDA_activity_object")
 })
 
-test_that("format",{
+test_that("errors",{
   data(LDAdata)
   cell.line <- unique(LDAdata$name)[1]
   x <- subset.data.frame(LDAdata, subset = (name==cell.line) & (Group == 0))

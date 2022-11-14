@@ -11,6 +11,7 @@
 #' data(LDAdata)
 #' Z1 <- subset.data.frame(LDAdata,subset = name == unique(LDAdata$name)[1])
 #' LDA_plot(Z1[,c("S-value","# Tested","# Clonal growth","Group","replicate")])
+#' @importFrom graphics "par"
 #' @export
 #'
 LDA_plot <- function(LDA_tab,

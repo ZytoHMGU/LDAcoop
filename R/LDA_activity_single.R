@@ -10,7 +10,7 @@
 #'
 #' @return list object with estimated activity, 95%-confidence interval,
 #'   84%-confidence interval, estimated parameters, corresponding covariance
-#'   matrix, fit-object and p-value for non-cooperativity-test
+#'   matrix, fit-object and p-value for cooperativity-test
 #'
 #' @examples
 #' x <- data.frame("cells" = c(10,50,100,250),

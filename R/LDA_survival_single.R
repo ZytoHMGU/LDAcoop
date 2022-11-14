@@ -1,4 +1,4 @@
-#' @title LDA_suvival_single
+#' @title LDA_survival_single
 #'
 #' @description calculate clonogenic survival fraction from LDA_activity objects
 #'

@@ -19,8 +19,7 @@
 #' out <- LDA_prepare_plot(Z1[,c("S-value","# Tested","# Clonal growth",
 #'                               "Group","replicate")])
 #' LDA_plot_activity(out[[1]])
-#' @importFrom graphics "abline" "par" "plot" "title"
-#' @importFrom graphics "polygon"
+#' @importFrom graphics "abline" "plot" "polygon"
 #' @export
 #'
 LDA_plot_activity <- function(LDA_obj,

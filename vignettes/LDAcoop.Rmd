@@ -181,7 +181,7 @@ that we expect many active cells among them, then this well will be positive.
  - imagine a number of cells so low  
 that the chance of an active cell among them is very low, then this well
 will be negative.
- - thus, in between those two numbers there will be cell numbers, where no-one 
+ - thus, between those two numbers there will be cell numbers, where no-one 
  can say, whether a colony will grow or not. It is rather a matter of chance.
  - from Poisson statistics we know, that a frequency of 37% negative wells will 
  be observed, when the average number of active cells per well is one

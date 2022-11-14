@@ -22,7 +22,7 @@
 #' @export
 #'
 LDA_prepare_plot <- function(LDA_tab,
-                             uncertainty = "ep"){
+                             uncertainty = "act"){
   if (class(LDA_tab)[1] != "data.frame"){
     stop("error: input must be of class data.frame")
   }

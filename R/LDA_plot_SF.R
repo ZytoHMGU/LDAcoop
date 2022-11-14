@@ -19,7 +19,7 @@
 #' out <- LDA_prepare<- plot(Z1[,c("S-value","# Tested","# Clonal growth",
 #'                                 "Group","replicate")])
 #' LDA_plot_SF(out[[2]])
-#' @importFrom graphics "abline" "par" "plot" "title"
+#' @importFrom graphics "plot" "title"
 #' @importFrom Hmisc "errbar" "ceil"
 #' @export
 #'
