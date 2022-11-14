@@ -168,7 +168,8 @@ LDA_prepare_plot <- function(LDA_tab,
       "un.type" = uncertainty,
       "col" = NA,
       "sf.msd.ep" = 1,
-      "sf.psd.ep" = 1
+      "sf.psd.ep" = 1,
+      stringsAsFactors = FALSE
     )
     SF <- LDA_survival(LDA_tab[,1:4])
     for (t in seq_along(SF)) {
@@ -178,7 +179,7 @@ LDA_prepare_plot <- function(LDA_tab,
                                 CurSF[[4]],
                                 uncertainty,
                                 NA,
-                                CurSF[[3]]))
+                                CurSF[[3]]),stringsAsFactors = FALSE)
     }
     out_SF$col <- colhex
     out_SF[,2] <- as.numeric(out_SF[,2])
