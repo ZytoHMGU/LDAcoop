@@ -9,6 +9,12 @@ LDA_plot(LDA_tab, uncertainty = "act", xlim = NULL, uncertainty.band = FALSE)
 \arguments{
 \item{LDA_tab}{LDA data.frame
 ("cells", "wells", "positive", "group", "replicate")}
+
+\item{uncertainty}{method for uncertainty calculation ("act", "ep")}
+
+\item{xlim}{setting xlim of clonogenic activity plot}
+
+\item{uncertainty.band}{plotting of uncertainty bands TRUE/FALSE}
 }
 \value{
 none

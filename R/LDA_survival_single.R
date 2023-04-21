@@ -22,9 +22,8 @@
 #' data(LDAdata)
 #' cell.line <- unique(LDAdata$name)[1]
 #' x <- subset.data.frame(LDAdata, subset = (name==cell.line) & (Group < 2))
-#' act <- LDA_activity(x[,1:4])
+#' act <- LDA_activity(x[,c(4:6,3)])
 #' sf <- LDA_survival_single(act.0 = act[[1]],act.x = act[[2]])
-
 #' @export
 #'
 LDA_survival_single <- function(act.0,act.x){

@@ -8,6 +8,10 @@ LDA_plot_activity(LDA_obj, xlim = NULL, uncertainty.band = FALSE)
 }
 \arguments{
 \item{LDA_obj}{list returned from LDA.prepare.plot}
+
+\item{xlim}{manually setting the xlim}
+
+\item{uncertainty.band}{plotting uncertainty bands TRUE/FALSE}
 }
 \value{
 none

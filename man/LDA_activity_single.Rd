@@ -12,7 +12,7 @@ wells, positive wells)}
 
 \item{name}{optional: experiment name (e.g. name of cell line)}
 
-\item{xtreat}{optional: treatment (e.g. irradiation dose in Gy)}
+\item{treat}{optional: treatment (e.g. irradiation dose in Gy)}
 }
 \value{
 list object with estimated activity, 95%-confidence interval,
@@ -30,6 +30,8 @@ x <- data.frame("cells" = c(10,50,100,250),
 act <- LDA_activity_single(x)
 data(LDAdata)
 cell.line <- unique(LDAdata$name)[1]
-x <- subset.data.frame(LDAdata, subset = (name==cell.line) & (Group == 0))
-LDA_activity_single(x[,1:3])
+x <- subset.data.frame(
+      LDAdata,
+      subset = (name==cell.line) & (Group == 0))
+LDA_activity_single(x[,4:6])
 }

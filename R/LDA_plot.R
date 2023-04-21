@@ -4,6 +4,9 @@
 #'
 #' @param LDA_tab LDA data.frame
 #'      ("cells", "wells", "positive", "group", "replicate")
+#' @param uncertainty method for uncertainty calculation ("act", "ep")
+#' @param xlim setting xlim of clonogenic activity plot
+#' @param uncertainty.band plotting of uncertainty bands TRUE/FALSE
 #'
 #' @return none
 #'

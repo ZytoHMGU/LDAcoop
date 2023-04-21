@@ -6,7 +6,7 @@
 #' @param x numeric data.frame or matrix with three columns (cells,
 #'   wells, positive wells)
 #' @param name optional: experiment name (e.g. name of cell line)
-#' @param xtreat optional: treatment (e.g. irradiation dose in Gy)
+#' @param treat optional: treatment (e.g. irradiation dose in Gy)
 #'
 #' @return list object with estimated activity, 95%-confidence interval,
 #'   84%-confidence interval, estimated parameters, corresponding covariance
@@ -19,9 +19,11 @@
 #' act <- LDA_activity_single(x)
 #' data(LDAdata)
 #' cell.line <- unique(LDAdata$name)[1]
-#' x <- subset.data.frame(LDAdata, subset = (name==cell.line) & (Group == 0))
-#' LDA_activity_single(x[,1:3])
-#' @importFrom stats "predict"
+#' x <- subset.data.frame(
+#'       LDAdata,
+#'       subset = (name==cell.line) & (Group == 0))
+#' LDA_activity_single(x[,4:6])
+#' @importFrom stats "glm" "binomial" "predict" "qnorm" "pnorm"
 #' @export
 #'
 LDA_activity_single <- function(x,

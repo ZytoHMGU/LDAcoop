@@ -3,6 +3,8 @@
 #' @description plot activity from LDA data
 #'
 #' @param LDA_obj list returned from LDA.prepare.plot
+#' @param xlim manually setting the xlim
+#' @param uncertainty.band plotting uncertainty bands TRUE/FALSE
 #'
 #' @return none
 #'
@@ -19,7 +21,8 @@
 #' out <- LDA_prepare_plot(Z1[,c("S-value","# Tested","# Clonal growth",
 #'                               "Group","replicate")])
 #' LDA_plot_activity(out[[1]])
-#' @importFrom graphics "abline" "plot" "polygon"
+#' @importFrom graphics "abline" "plot" "polygon" "lines"
+#' @importFrom grDevices "rgb" "col2rgb"
 #' @export
 #'
 LDA_plot_activity <- function(LDA_obj,

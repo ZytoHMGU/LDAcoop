@@ -4,6 +4,8 @@
 #'
 #' @param LDA_tab LDA data.frame
 #'      ("cells", "wells", "positive", "group", "replicate")
+#' @param uncertainty type of SF-uncertainty activity based ("act") or by
+#'      error propagation ("ep")
 #'
 #' @return none
 #'
@@ -19,6 +21,7 @@
 #' LDA_prepare_plot(Z1[,c("S-value","# Tested","# Clonal growth","Group",
 #'                        "replicate")])
 #' @importFrom grDevices "colorRampPalette"
+#' @importFrom stats "aggregate.data.frame"
 #' @export
 #'
 LDA_prepare_plot <- function(LDA_tab,
@@ -31,15 +34,17 @@ LDA_prepare_plot <- function(LDA_tab,
          'ep' (error propagation) or
          'act' (activity CIs)")
   }
+  cnames <- c("cells","wells","positive","group","replicate")
+  colnames(LDA_tab) <- cnames[seq_along(colnames(LDA_tab))]
   if (ncol(LDA_tab) == 3){
-    LDA_tab$Group <- 0
+    LDA_tab$group <- 0
   }
 
   # setting options
   alpha <- 0.05
 
   # get data per treatment and replicate
-  grps <- unique(LDA_tab$Group)
+  grps <- unique(LDA_tab$group)
   N_treat <- length(grps)
 
   out_act <- vector(mode = "list",
@@ -61,7 +66,7 @@ LDA_prepare_plot <- function(LDA_tab,
                                       "unc.band" = NULL))
     x_sp <- NULL
     d_g <- subset.data.frame(x = LDA_tab,
-                             subset = Group == grps[gi])
+                             subset = group == grps[gi])
     rplcts <- unique(d_g$replicate)
     for (ri in rplcts){
       ddd <- subset.data.frame(x = d_g,
@@ -122,8 +127,8 @@ LDA_prepare_plot <- function(LDA_tab,
   rm(InfPos)
 
   # new data - x-axis?
-  xmax <- max(LDA_tab$`S-value`)
-  xmin <- min(LDA_tab$`S-value`)
+  xmax <- max(LDA_tab$cells)
+  xmin <- min(LDA_tab$cells)
   new.data <- data.frame(
     "x" = seq(log(xmin/2),
                 log(2*xmax),
@@ -131,7 +136,7 @@ LDA_prepare_plot <- function(LDA_tab,
 
   for (gi in seq_along(grps)){
     d_g <- subset.data.frame(x = LDA_tab,
-                             subset = Group == grps[gi])
+                             subset = group == grps[gi])
     d_a <- LDA_activity_single(x = d_g[,1:3])
     out_act[[gi]]$model$fit <- d_a$model
     pred <- predict(object = d_a$model,
@@ -150,9 +155,10 @@ LDA_prepare_plot <- function(LDA_tab,
     polygon_y[is.nan(polygon_y)] <- min(polygon_y,na.rm = TRUE)
 
     out_act[[gi]]$model$unc.alpha <- alpha
-    out_act[[gi]]$model$unc.band <- data.frame("x" = exp(new.data$x),
-                                           "y.ub" = polygon_y[1:length(new.data$x)],
-                                           "y.lb" = polygon_y[(1+length(new.data$x)):(2*length(new.data$x))])
+    out_act[[gi]]$model$unc.band <- data.frame(
+      "x" = exp(new.data$x),
+      "y.ub" = polygon_y[seq_along(new.data$x)],
+      "y.lb" = polygon_y[seq_along(new.data$x)+length(new.data$x)])
 
   }
 
