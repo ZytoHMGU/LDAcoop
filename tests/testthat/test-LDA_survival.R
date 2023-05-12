@@ -6,5 +6,5 @@ test_that("form", {
   sf <- LDA_survival(x[,1:4])
   expect_equal(class(sf),"list")
   expect_error(LDA_survival(list(x[,1:4])))
-  expect_error(LDA_survival(x))
+  expect_error(LDA_survival(x[,1:3]))
 })

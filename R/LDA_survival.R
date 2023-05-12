@@ -21,7 +21,7 @@ LDA_survival <- function(x,name = "cell linea a"){
   if (!(class(x)[1] %in% c("data.frame","matrix"))){
     stop("error: x must be of class data.frame or matrix")
   }
-  if (ncol(x) != 4){
+  if (ncol(x) < 4){
     stop("error: analysis of clonogenic survival requires at least 2 groups
          in column 4. Consider LDA_activity() for analysis of clonogenic
          activity.")
@@ -34,7 +34,7 @@ LDA_survival <- function(x,name = "cell linea a"){
     act.1 <- act[[i+1]]
     sf <- LDA_survival_single(act.0 = act.0,
                               act.x = act.1)
-    sf$treatment <- act.1$treatment
+    #sf$treatment <- act.1$treatment
     sf_list[[i]] <- sf
   }
   return(sf_list)
