@@ -1,6 +1,8 @@
 #' @title LDA_plot_activity
 #'
-#' @description plot activity from LDA data
+#' @description generate clonogenic activity estimation plot (frequency of
+#'   negative wells over the number of cells seeded) from LDA data. Input is an
+#'   data object as returned by preprocessing function LDA_prepare_plot().
 #'
 #' @param LDA_obj list returned from LDA.prepare.plot
 #' @param xlim manually setting the xlim

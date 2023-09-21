@@ -1,7 +1,7 @@
 #' @title LDA_table
 #'
 #' @description show table with activities and clonogenic survival from LDA data
-#'   object
+#'   object.
 #'
 #' @param x numeric data.frame or matrix with at least three columns (cells,
 #'   wells, positive wells, group (optional))

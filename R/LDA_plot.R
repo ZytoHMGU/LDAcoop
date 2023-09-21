@@ -1,6 +1,7 @@
 #' @title LDA_plot
 #'
-#' @description plot activity from LDA data
+#' @description plot clonogenic activity and survival (for more than one
+#'   treatment group) from LDA data.
 #'
 #' @param LDA_tab LDA data.frame
 #'      ("cells", "wells", "positive", "group", "replicate")

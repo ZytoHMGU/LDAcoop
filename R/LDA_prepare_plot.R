@@ -1,6 +1,6 @@
 #' @title LDA_prepare_plot
 #'
-#' @description analyze LDA data and collect information for plotting
+#' @description analyze LDA data and collect information for plotting.
 #'
 #' @param LDA_tab LDA data.frame
 #'      ("cells", "wells", "positive", "group", "replicate")
@@ -66,7 +66,7 @@ LDA_prepare_plot <- function(LDA_tab,
                                       "unc.band" = NULL))
     x_sp <- NULL
     d_g <- subset.data.frame(x = LDA_tab,
-                             subset = group == grps[gi])
+                             subset = LDA_tab$group == grps[gi])
     rplcts <- unique(d_g$replicate)
     for (ri in rplcts){
       ddd <- subset.data.frame(x = d_g,
@@ -136,7 +136,7 @@ LDA_prepare_plot <- function(LDA_tab,
 
   for (gi in seq_along(grps)){
     d_g <- subset.data.frame(x = LDA_tab,
-                             subset = group == grps[gi])
+                             subset = LDA_tab$group == grps[gi])
     d_a <- LDA_activity_single(x = d_g[,1:3])
     out_act[[gi]]$model$fit <- d_a$model
     pred <- predict(object = d_a$model,
