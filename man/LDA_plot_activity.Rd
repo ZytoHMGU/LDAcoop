@@ -17,7 +17,9 @@ LDA_plot_activity(LDA_obj, xlim = NULL, uncertainty.band = FALSE)
 none
 }
 \description{
-plot activity from LDA data
+generate clonogenic activity estimation plot (frequency of
+  negative wells over the number of cells seeded) from LDA data. Input is an
+  data object as returned by preprocessing function LDA_prepare_plot().
 }
 \examples{
 x <- data.frame("cells" = rep(c(10,50,100,250),times = 4),

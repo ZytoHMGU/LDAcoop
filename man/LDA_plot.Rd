@@ -20,7 +20,8 @@ LDA_plot(LDA_tab, uncertainty = "act", xlim = NULL, uncertainty.band = FALSE)
 none
 }
 \description{
-plot activity from LDA data
+plot clonogenic activity and survival (for more than one
+  treatment group) from LDA data.
 }
 \examples{
 data(LDAdata)

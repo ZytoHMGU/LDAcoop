@@ -306,7 +306,7 @@ how many?' is still the same. It is just restricted to the special outcome of
 37% negative wells. 
 The choice of 'outcome of 37% negative wells' is quite artificial and the 
 activity for higher or lower active well ratios would change. 
-But when it comes to survival fractions, this shift is mostly cutted out and 
+But when it comes to survival fractions, this shift is mostly cut out and 
 thereby this approach filters (in parts) a cooperativity-bias in those 
 survival fractions.
 
@@ -331,7 +331,7 @@ can be calculated from the fitted GLM parameters as
 Therefore, the interpretation of survival fractions is straight forward.
 If the number of cells needed to be seeded with treatment is ten times the 
 number without treatment, the survival fraction is calculated as $0.1$. 
-Note that it is implicitely assumed, that those cells that are non-survivers 
+Note that it is implicitly assumed, that those cells that are non-survivors 
 of the treatment, do not contribute to the cooperative stimulation of the 
 survivors. Otherwise the treatment effect will be underestimated.
 
@@ -347,7 +347,7 @@ as the activities are (cutting $y=-1$).
 
 Uncertainties of the survival fractions can be generally assessed by two ways
 
- - robust approximation of by combination of the 84%-confidence-intervals of 
+ - robust approximation by combination of the 84%-confidence-intervals of 
  the activity (method (a), see Austin et al. (2002), Payton et al. (2003), 
  Knol et al. (2011))
  - calculation following the law of error propagation through first order Taylor 

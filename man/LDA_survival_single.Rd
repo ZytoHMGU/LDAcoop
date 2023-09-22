@@ -17,7 +17,8 @@ list object with survival fraction, estimated confidence intervals
   by combination of 84%-uncertainty-intervals of activity estimates)
 }
 \description{
-calculate clonogenic survival fraction from LDA_activity objects
+calculate clonogenic survival fraction from LDA_activity
+  objects.
 }
 \examples{
 x.a <- data.frame("cells" = c(10,50,100,250),

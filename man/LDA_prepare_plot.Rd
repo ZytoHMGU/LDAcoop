@@ -17,7 +17,7 @@ error propagation ("ep")}
 none
 }
 \description{
-analyze LDA data and collect information for plotting
+analyze LDA data and collect information for plotting.
 }
 \examples{
 x <- data.frame("cells" = rep(c(10,50,100,250),times = 4),
@@ -26,8 +26,8 @@ x <- data.frame("cells" = rep(c(10,50,100,250),times = 4),
                 "group" = rep(c(rep("A",4),rep("B",4)),times = 2),
                 "replicate" = c(rep(1,8),rep(2,8)))
 LDA_prepare_plot(x)
-data(LDAdata)
-Z1 <- subset.data.frame(LDAdata,subset = name == unique(LDAdata$name)[1])
-LDA_prepare_plot(Z1[,c("S-value","# Tested","# Clonal growth","Group",
-                       "replicate")])
+#data(LDAdata)
+#Z1 <- subset.data.frame(LDAdata,subset = name == unique(LDAdata$name)[1])
+#LDA_prepare_plot(Z1[,c("S-value","# Tested","# Clonal growth","Group",
+#                      "replicate")])
 }

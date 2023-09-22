@@ -21,7 +21,7 @@ table
 }
 \description{
 show table with activities and clonogenic survival from LDA data
-  object
+  object.
 }
 \examples{
 x <- data.frame("cells" = c(10,50,100,250,10,50,100,250),
