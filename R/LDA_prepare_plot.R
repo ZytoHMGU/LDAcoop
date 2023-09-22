@@ -16,10 +16,10 @@
 #'                 "group" = rep(c(rep("A",4),rep("B",4)),times = 2),
 #'                 "replicate" = c(rep(1,8),rep(2,8)))
 #' LDA_prepare_plot(x)
-#' data(LDAdata)
-#' Z1 <- subset.data.frame(LDAdata,subset = name == unique(LDAdata$name)[1])
-#' LDA_prepare_plot(Z1[,c("S-value","# Tested","# Clonal growth","Group",
-#'                        "replicate")])
+#' #data(LDAdata)
+#' #Z1 <- subset.data.frame(LDAdata,subset = name == unique(LDAdata$name)[1])
+#' #LDA_prepare_plot(Z1[,c("S-value","# Tested","# Clonal growth","Group",
+#' #                      "replicate")])
 #' @importFrom grDevices "colorRampPalette"
 #' @importFrom stats "aggregate.data.frame"
 #' @export

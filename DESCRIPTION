@@ -1,6 +1,6 @@
 Package: LDAcoop
 Type: Package
-Title: Analysis of LDA Data With or Without Cellular Cooperation
+Title: Analysis of LDA Data with or Without Cellular Cooperation
 Version: 0.1.0
 Authors@R: c(
     person("Daniel", "Samaga", 
@@ -16,7 +16,7 @@ Maintainer: Daniel Samaga <daniel.samaga@helmholtz-munich.de>
 URL: https://github.com/ZytoHMGU/LDAcoop
 BugReports: https://github.com/ZytoHMGU/LDAcoop/issues
 Description: Cellular cooperation compromises the established method of 
-    calculating clonogenic actitivy from LDA data. This tool provides functions 
+    calculating clonogenic activity from LDA data. This tool provides functions 
     that enable robust analysis in presence or absence of cellular cooperation. 
     The implemented method incorporated the same cooperativity module to model 
     the non-linearity associated with cellular cooperation as known from the 
