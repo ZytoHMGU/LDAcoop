@@ -17,11 +17,11 @@ URL: https://github.com/ZytoHMGU/LDAcoop
 BugReports: https://github.com/ZytoHMGU/LDAcoop/issues
 Description: Cellular cooperation compromises the established method of 
     calculating clonogenic actitivy from LDA data. This tool provides functions 
-    that enable robust analysis in presence or absence of cellular cooperation.
-    The implemented method incorporated the same cooperativity module to 
-    model the non-linearity associated with cellular cooperation as known from 
-    the colony formation assay. (see Brix et al. (2021): "Analysis of clonogenic 
-    growth in vitro." Nature protocols, 2021, 16, 4963-4991)
+    that enable robust analysis in presence or absence of cellular cooperation. 
+    The implemented method incorporated the same cooperativity module to model 
+    the non-linearity associated with cellular cooperation as known from the 
+    colony formation assay (Brix et al. (2021) <doi:10.1038/s41596-021-00615-0>: 
+    "Analysis of clonogenic growth in vitro." Nature protocols).
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
