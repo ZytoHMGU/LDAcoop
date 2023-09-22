@@ -69,7 +69,7 @@ clonogenic activity of
 100 cells is higher than the activity of 100 separated single cells. In terms
 of single cell activity, 100 cells act as if they were more.
 
-Thus, the gold standard analysis method is semantically applicable 
+Thus, the gold standard analysis method is syntactically applicable 
 but its result is biased (i.e. meaningless) for cooperatively growing 
 cells.
 
