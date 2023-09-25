@@ -20,8 +20,9 @@ list object with estimated activity, 95%-confidence interval,
   matrix, fit-object and p-value for cooperativity-test
 }
 \description{
-calculation of activity in a block of LDA data
-  (i.e. numbers of: cells seeded, wells, positive wells).
+calculation of clonogenic activity from data collected by a
+  limiting dilution assay (LDA) experiment (i.e. numbers of: cells seeded,
+  wells, positive wells).
 }
 \examples{
 x <- data.frame("cells" = c(10,50,100,250),

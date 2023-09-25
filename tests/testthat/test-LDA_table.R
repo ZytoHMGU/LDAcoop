@@ -3,7 +3,7 @@ test_that("table", {
   cell.line <- unique(LDAdata$name)[1]
   x <- subset.data.frame(LDAdata, subset = (name==cell.line))
   x <- x[,c(4,5,6,3,2,1)]
-  expect_equal(class(LDA_table(x[,1:3])),"LDA_activity_object")
+  expect_equal(class(LDA_table(x[,1:3])),"list")
   x$`S-value` <- as.character(x$`S-value`)
   expect_error(LDA_table(x[,1:4]))
   x <- subset.data.frame(LDAdata, subset = (name==cell.line))

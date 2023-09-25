@@ -1,7 +1,8 @@
 #' @title LDA_activity
 #'
-#' @description calculation of activity in a table of LDA data
-#'   (i.e. cells, wells, positive wells, group).
+#' @description calculation of clonogenic activities from data collected in a
+#'   limiting dilution assay (LDA) experiment (i.e. cells, wells, positive
+#'   wells, group).
 #'
 #' @param x numeric data.frame or matrix with three columns (cells,
 #'   wells, positive wells, group (optional))

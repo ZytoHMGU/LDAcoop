@@ -1,4 +1,4 @@
-#' LDA data from a set of cell lines
+#' LDA (limiting dilution assay) data from a set of cell lines
 #'
 #' LDA data from 11 cell lines, up to 4 biological replicates and up to 6
 #' treatments.

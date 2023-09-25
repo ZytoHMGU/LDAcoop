@@ -1,7 +1,8 @@
 #' @title LDA_survival
 #'
-#' @description calculation of clonogenic survival in a table of LDA data
-#'   (i.e. cells, wells, positive wells, group).
+#' @description calculation of clonogenic survival in a table of data from a
+#'   limiting dilution assay (LDA) experiment (i.e. cells, wells, positive
+#'   wells, group).
 #'
 #' @param x numeric data.frame or matrix with three columns (cells,
 #'   wells, positive wells, group)
@@ -17,7 +18,7 @@
 #' act <- LDA_survival(x)
 #' @export
 #'
-LDA_survival <- function(x,name = "cell linea a"){
+LDA_survival <- function(x,name = "cell line a"){
   if (!(class(x)[1] %in% c("data.frame","matrix"))){
     stop("error: x must be of class data.frame or matrix")
   }

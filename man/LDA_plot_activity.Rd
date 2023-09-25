@@ -7,7 +7,7 @@
 LDA_plot_activity(LDA_obj, xlim = NULL, uncertainty.band = FALSE)
 }
 \arguments{
-\item{LDA_obj}{list returned from LDA.prepare.plot}
+\item{LDA_obj}{list returned from LDA_prepare_plot}
 
 \item{xlim}{manually setting the xlim}
 
@@ -18,8 +18,9 @@ none
 }
 \description{
 generate clonogenic activity estimation plot (frequency of
-  negative wells over the number of cells seeded) from LDA data. Input is an
-  data object as returned by preprocessing function LDA_prepare_plot().
+  negative wells over the number of cells seeded) for data of limiting
+  dilution assay (LDA) experiments. Input is an data object as returned by
+  the preprocessing function LDA_prepare_plot().
 }
 \examples{
 x <- data.frame("cells" = rep(c(10,50,100,250),times = 4),

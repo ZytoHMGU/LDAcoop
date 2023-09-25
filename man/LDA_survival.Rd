@@ -4,7 +4,7 @@
 \alias{LDA_survival}
 \title{LDA_survival}
 \usage{
-LDA_survival(x, name = "cell linea a")
+LDA_survival(x, name = "cell line a")
 }
 \arguments{
 \item{x}{numeric data.frame or matrix with three columns (cells,
@@ -16,8 +16,9 @@ wells, positive wells, group)}
 list object with LDA-activities as returned by LDA_activity_single
 }
 \description{
-calculation of clonogenic survival in a table of LDA data
-  (i.e. cells, wells, positive wells, group).
+calculation of clonogenic survival in a table of data from a
+  limiting dilution assay (LDA) experiment (i.e. cells, wells, positive
+  wells, group).
 }
 \examples{
 x <- data.frame("cells" = c(10,50,100,250,10,50,100,250),

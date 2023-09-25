@@ -14,8 +14,9 @@ none
 }
 \description{
 generate clonogenic survival plot (estimated clonogenic
-  survival over treatment) for LDA data. Input is an
-  data object as returned by preprocessing function LDA_prepare_plot().
+  survival over treatment) for data from limiting dilution assay (LDA).
+  Input is an data object as returned by the preprocessing function
+  LDA_prepare_plot().
 }
 \examples{
 x <- data.frame("cells" = rep(c(10,50,100,250),times = 4),

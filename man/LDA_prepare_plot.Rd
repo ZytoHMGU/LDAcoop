@@ -10,14 +10,15 @@ LDA_prepare_plot(LDA_tab, uncertainty = "act")
 \item{LDA_tab}{LDA data.frame
 ("cells", "wells", "positive", "group", "replicate")}
 
-\item{uncertainty}{type of SF-uncertainty activity based ("act") or by
-error propagation ("ep")}
+\item{uncertainty}{method for approximation of uncertainties of survival
+fractions (SF): activity based ("act") or by error propagation ("ep")}
 }
 \value{
 none
 }
 \description{
-analyze LDA data and collect information for plotting.
+analyze limiting dilution assay (LDA) data and collect
+     information for plotting.
 }
 \examples{
 x <- data.frame("cells" = rep(c(10,50,100,250),times = 4),
@@ -26,8 +27,8 @@ x <- data.frame("cells" = rep(c(10,50,100,250),times = 4),
                 "group" = rep(c(rep("A",4),rep("B",4)),times = 2),
                 "replicate" = c(rep(1,8),rep(2,8)))
 LDA_prepare_plot(x)
-#data(LDAdata)
-#Z1 <- subset.data.frame(LDAdata,subset = name == unique(LDAdata$name)[1])
-#LDA_prepare_plot(Z1[,c("S-value","# Tested","# Clonal growth","Group",
+# data(LDAdata)
+# Z1 <- subset.data.frame(LDAdata,subset = name == unique(LDAdata$name)[1])
+# LDA_prepare_plot(Z1[,c("S-value","# Tested","# Clonal growth","Group",
 #                      "replicate")])
 }

@@ -1,7 +1,7 @@
 #' @title LDA_plot
 #'
-#' @description plot clonogenic activity and survival (for more than one
-#'   treatment group) from LDA data.
+#' @description plot clonogenic activity and survival (at more than one
+#'   treatment group) for data from limiting dilution assay (LDA) experiments.
 #'
 #' @param LDA_tab LDA data.frame
 #'      ("cells", "wells", "positive", "group", "replicate")

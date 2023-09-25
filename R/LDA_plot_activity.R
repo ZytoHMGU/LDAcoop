@@ -1,10 +1,11 @@
 #' @title LDA_plot_activity
 #'
 #' @description generate clonogenic activity estimation plot (frequency of
-#'   negative wells over the number of cells seeded) from LDA data. Input is an
-#'   data object as returned by preprocessing function LDA_prepare_plot().
+#'   negative wells over the number of cells seeded) for data of limiting
+#'   dilution assay (LDA) experiments. Input is an data object as returned by
+#'   the preprocessing function LDA_prepare_plot().
 #'
-#' @param LDA_obj list returned from LDA.prepare.plot
+#' @param LDA_obj list returned from LDA_prepare_plot
 #' @param xlim manually setting the xlim
 #' @param uncertainty.band plotting uncertainty bands TRUE/FALSE
 #'

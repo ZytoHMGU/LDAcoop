@@ -12,21 +12,21 @@ wells, positive wells, group (optional))}
 
 \item{ref_class}{name of reference class for calculation of SF values}
 
-\item{uncertainty}{method for calculating the SF uncertainty bands ("act"
-(default) for combining the activity confidence intervals; "ep" for error
-propagation via first order Taylor series expansion.)}
+\item{uncertainty}{method for calculating the uncertainty bands of survival
+fractions ("act" (default) for combining the activity confidence intervals;
+"ep" for error propagation via first order Taylor series expansion.)}
 }
 \value{
 table
 }
 \description{
-show table with activities and clonogenic survival from LDA data
-  object.
+show table with activities and clonogenic survival from limiting
+  dilution assay (LDA) data.
 }
 \examples{
 x <- data.frame("cells" = c(10,50,100,250,10,50,100,250),
                 "wells" = rep(25,8),
                 "positive" = c(2,5,10,20,1,2,6,11),
                 "group" = c(rep("A",4),rep("B",4)))
-LDA_table(x)
+LDA_table(x,ref_class = "A")
 }

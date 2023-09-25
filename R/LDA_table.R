@@ -1,14 +1,14 @@
 #' @title LDA_table
 #'
-#' @description show table with activities and clonogenic survival from LDA data
-#'   object.
+#' @description show table with activities and clonogenic survival from limiting
+#'   dilution assay (LDA) data.
 #'
 #' @param x numeric data.frame or matrix with at least three columns (cells,
 #'   wells, positive wells, group (optional))
 #' @param ref_class name of reference class for calculation of SF values
-#' @param uncertainty method for calculating the SF uncertainty bands ("act"
-#'   (default) for combining the activity confidence intervals; "ep" for error
-#'   propagation via first order Taylor series expansion.)
+#' @param uncertainty method for calculating the uncertainty bands of survival
+#'   fractions ("act" (default) for combining the activity confidence intervals;
+#'   "ep" for error propagation via first order Taylor series expansion.)
 #'
 #' @return table
 #'
@@ -17,21 +17,18 @@
 #'                 "wells" = rep(25,8),
 #'                 "positive" = c(2,5,10,20,1,2,6,11),
 #'                 "group" = c(rep("A",4),rep("B",4)))
-#' LDA_table(x)
+#' LDA_table(x,ref_class = "A")
 #' @export
 #'
 LDA_table <- function(x,ref_class = "unknown",uncertainty = "act"){
   if (ncol(x)==3){
     act <- LDA_activity_single(x = x)
-    print("activity^-1 [N]")
-    print(round(act$act,digits = 3))
-    print("confidence interval")
-    print(round(act$CI,digits = 3))
-    print("cooperativity coefficient b")
-    print(round(act$est[2,1],digits = 3))
-    print("p-value cooperativity")
-    print(round(act$p.lin.Model,digits = 3))
-    return(act)
+    show_LDA <- list(
+      "activity^-1 [N]" = round(act$act,digits = 3),
+      "confidence interval" = round(act$CI,digits = 3),
+      "cooperativity coefficient b" = round(act$est[2,1],digits = 3),
+      "p-value cooperativity" = round(act$p.lin.Model,digits = 3))
+    return(show_LDA)
   }
   colnames(x)[1:4] <- c("cells","wells","positive","group")
   if (!is.numeric(x$cells) | !is.numeric(x$wells) | !is.numeric(x$positive)){
@@ -42,7 +39,7 @@ LDA_table <- function(x,ref_class = "unknown",uncertainty = "act"){
     if (ref_class != 0){
       warning(paste0("warning: reference class for survival analysis is ",
                      ref_class,
-                     ", not 0. - specifiy ref_class or reorder data!"))
+                     ", not 0. - specify ref_class or reorder data!"))
     } else {
       print(" reference class is 0")
     }

@@ -20,8 +20,8 @@ LDA_plot(LDA_tab, uncertainty = "act", xlim = NULL, uncertainty.band = FALSE)
 none
 }
 \description{
-plot clonogenic activity and survival (for more than one
-  treatment group) from LDA data.
+plot clonogenic activity and survival (at more than one
+  treatment group) for data from limiting dilution assay (LDA) experiments.
 }
 \examples{
 data(LDAdata)

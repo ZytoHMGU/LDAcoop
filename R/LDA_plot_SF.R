@@ -1,8 +1,9 @@
 #' @title LDA_plot_SF
 #'
 #' @description generate clonogenic survival plot (estimated clonogenic
-#'   survival over treatment) for LDA data. Input is an
-#'   data object as returned by preprocessing function LDA_prepare_plot().
+#'   survival over treatment) for data from limiting dilution assay (LDA).
+#'   Input is an data object as returned by the preprocessing function
+#'   LDA_prepare_plot().
 #'
 #' @param LDA_obj list returned from LDA_prepare_plot
 #'

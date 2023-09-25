@@ -16,8 +16,9 @@ wells, positive wells, group (optional))}
 list object with LDA-activities as returned by LDA_activity_single
 }
 \description{
-calculation of activity in a table of LDA data
-  (i.e. cells, wells, positive wells, group).
+calculation of clonogenic activities from data collected in a
+  limiting dilution assay (LDA) experiment (i.e. cells, wells, positive
+  wells, group).
 }
 \examples{
 x <- data.frame("cells" = c(10,50,100,250,10,50,100,250),

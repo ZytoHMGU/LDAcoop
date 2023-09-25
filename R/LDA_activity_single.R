@@ -1,7 +1,8 @@
 #' @title LDA_activity_single
 #'
-#' @description calculation of activity in a block of LDA data
-#'   (i.e. numbers of: cells seeded, wells, positive wells).
+#' @description calculation of clonogenic activity from data collected by a
+#'   limiting dilution assay (LDA) experiment (i.e. numbers of: cells seeded,
+#'   wells, positive wells).
 #'
 #' @param x numeric data.frame or matrix with three columns (cells,
 #'   wells, positive wells)

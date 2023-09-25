@@ -3,7 +3,7 @@
 \docType{data}
 \name{LDAdata}
 \alias{LDAdata}
-\title{LDA data from a set of cell lines}
+\title{LDA (limiting dilution assay) data from a set of cell lines}
 \format{
 data.frame with columns: "name", "replicate", "Group", "S-value",
 "# Tested", "# Clonal growth"
