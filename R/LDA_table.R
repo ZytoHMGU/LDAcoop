@@ -41,7 +41,7 @@ LDA_table <- function(x,ref_class = "unknown",uncertainty = "act"){
                      ref_class,
                      ", not 0. - specify ref_class or reorder data!"))
     } else {
-      print(" reference class is 0")
+      message(" reference class is 0")
     }
   }
   x <- rbind(subset.data.frame(x = x,subset = x$group==ref_class),

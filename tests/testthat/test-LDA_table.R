@@ -23,6 +23,9 @@ test_that("uncertainty choice", {
   cell.line <- unique(LDAdata$name)[1]
   x <- subset.data.frame(LDAdata, subset = (name==cell.line))
   x <- x[,c(4,5,6,3,2,1)]
-  LDA_table(x[,1:4],uncertainty = "ep")
-  expect_output(LDA_table(x[,1:4],uncertainty = "act"))
+  u.ep <- LDA_table(x[,1:4],uncertainty = "ep")
+  u.act <- LDA_table(x[,1:4],uncertainty = "act")
+  expect_identical(u.ep$act.CI.lb,u.act$act.CI.lb)
+  expect_identical(u.ep$SF,u.act$SF)
+  expect_true(u.ep$SF.CI.lb[4]!=u.act$SF.CI.lb[4])
 })
