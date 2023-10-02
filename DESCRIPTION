@@ -9,6 +9,8 @@ Authors@R: c(
            role = c("cre","aut")),
     person("Nikko", "Brix", 
            role = "aut"),
+    person("Benedek","Danko",
+           role = "aut"),
     person("Kirsten", "Lauber", 
            role = "aut"),
     person("Horst", "Zitzelsberger", 
