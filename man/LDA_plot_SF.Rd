@@ -22,7 +22,7 @@ generate clonogenic survival plot (estimated clonogenic
 x <- data.frame("cells" = rep(c(10,50,100,250),times = 4),
                 "wells" = rep(25,16),
                 "positive" = c(2,5,10,20,1,2,6,11,3,4,8,22,1,1,7,12),
-                "group" = rep(c(rep("A",4),rep("B",4)),times = 2),
+                "group" = rep(c(rep(0,4),rep(6,4)),times = 2),
                 "replicate" = c(rep(1,8),rep(2,8)))
 out <- LDA_prepare_plot(x)
 LDA_plot_SF(out[[2]])
