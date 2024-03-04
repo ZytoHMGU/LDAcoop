@@ -2,7 +2,7 @@ Package: LDAcoop
 Type: Package
 Title: Analysis of Data from Limiting Dilution Assay (LDA) with or without 
     Cellular Cooperation
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(
     person("Daniel", "Samaga", 
            email = "daniel.samaga@helmholtz-munich.de",

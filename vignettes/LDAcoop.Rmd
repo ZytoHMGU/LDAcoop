@@ -23,7 +23,8 @@ The LDA is the gold standard for quantification of the clonogenic capacity of
 non-adherent cells. 
 The most common method for calculating this capacity from an LDA experiment 
 assumes implicitly independence of all cells. Interestingly, this assumption 
-does not hold for many cell lines (i.e. cooperatively growing cells). 
+does not hold for many cell lines (i.e. cooperatively and competitively growing 
+cells). 
 
 ### The effect of cellular cooperation
 
@@ -66,8 +67,8 @@ and thereby biases the estimate of the gold standard analysis method,
 which assumes linearity. 
 In other words: when surrounded by many other cells, the combined 
 clonogenic activity of 
-100 cells is higher than the activity of 100 separated single cells. In terms
-of single cell activity, 100 cells act as if they were more.
+100 cells is higher than the activity of 100 separated single cells. 
+In terms of single cell activity, 100 cells act as if they were more.
 
 Thus, the gold standard analysis method is syntactically applicable 
 but its result is biased (i.e. meaningless) for cooperatively growing 
@@ -159,20 +160,20 @@ In the LDA, distinct numbers of cells are seeded in wells. The number of
 seeded cells per well is often called dose.
 Since, we do not want to get confused with the irradiation dose, which is a 
 frequent treatment in the field of radiation oncology, we denote the number of 
-cells seeded with $s$. 
+cells seeded with $S$. 
 The readout of each well in the LDA is dichotomous (growth / no growth).
-So, from the binomially distributed number of active cells in a well $X$ where
+So, from the binomially distributed number of active cells in a well $X$ with
 
 \[P(X=k) = \left( \begin{matrix} s \\ k \end{matrix}\right) 
-p^{k} (1-p)^{s-k} \]
+p^{k} (1-p)^{S-k} \]
 
 only $X=0$ and $X \neq 0$ can be observed experimentally.
 Thus, it is about the frequency of positive wells as a function of the 
-number of cells seeded ($k/n = f(s)$).
+number of cells seeded ($k/n = f(S)$).
 For dealing with high cell numbers, the binomial distribution is approximated 
 by the 
-asymptotically identical (for $s \to \infty$) Poisson distribution (with 
-$\lambda = s \cdot p$):
+asymptotically identical (for $S \to \infty$) Poisson distribution (with 
+$\lambda = S \cdot p$):
 \[P_{\lambda}(X=k) = \frac{\lambda^k}{k!} e^{-\lambda}.\]
 
 The basic concept for estimating the clonogenic activity of a cell suspension 
@@ -196,57 +197,61 @@ of cells per well', we find the clonogenic activity as the number of cells
 ## Mathematical model
 
 Let $n$ be the number of wells, and let $\mu$ denote the expected fraction of 
-positive wells. Following the single-hit Poisson model 
-(SHPM, $P_{\lambda}(k=0) = e^{-p s}$), the expectation 
-is:
-\[\mu = 1-e^{-ps}.\]
+negative wells (failures). Following the single-hit Poisson model 
+(SHPM: $\lambda_{SHPM} = p \cdot S$), the expectation of active cells in a well 
+is approximately Poisson 
+distributed and depends linearly on the number of cells seeded $S$ as well as 
+the probability $p$ of each cell being active (i.e., clonogenic). 
+We therefore find $P_{\lambda}(k=0) = e^{-p S}$), and thus:
+\[\mu = e^{-pS}.\]
 
-The number of failures $r$ is again binomially distributed
+The number of failures $r$ is binomially distributed
 
 \[ P(Y=r) = \left( \begin{matrix} n \\ r \end{matrix}\right) 
-(1-\mu)^{r} \mu^{n-r}. \]
+\mu^{r} (1-\mu)^{n-r}. \]
 
-We find (for $\alpha = log(p)$, $\xi = log(s)$)
+We find (for $\alpha = ln(p)$, $\xi = ln(S)$)
 
 \begin{align*}
-\Leftrightarrow 1-\mu &= e^{- p s}\\
-\Leftrightarrow log(1-\mu) &= - p s \\
-\Leftrightarrow -log(1-\mu) &= p \cdot s \\ 
-\Leftrightarrow log(-log(1-\mu)) &= \alpha + \xi 
+\Leftrightarrow \mu &= e^{- p S}\\
+\Leftrightarrow ln(\mu) &= - p S \\
+\Leftrightarrow -ln(\mu) &= p \cdot S \\ 
+\Leftrightarrow ln(-ln(\mu)) &= \alpha + \xi 
 \end{align*}
 
 Therefore, technically the identification of the required number of cells is 
 done via a generalized linear regression model 
-(binomial family, cloglog link function).
+(binomial family, loglog link function).
 The clonogenic activity is $p = e^{\alpha}$.
 
 ### Cooperativity
 
-In the presented model, $p$ is independent from $s$.
+In the presented model, $p$ is independent from $S$.
 So implicitly, it is assumed, that 100 single cells in single wells have the 
 identical chance to result in at least one colony as a single well with those 
 100 cells would have. 
 
 But this is often not the case.
 Cells export or release substances into the medium and thereby 
-communicate and cooperate.
+communicate and cooperate (or compete).
 The combined chance of a group of cells to grow into a clone often exceeds the 
 sum of the individual chances. 
 (See CFAcoop, for a number of cells seeded $S$ and a number of resulting 
 colonies $C$ we find $C = a \cdot S^b$.)
 
-Thus, allowing for the same communication and cooperativity, we replace 
-$\lambda = p \cdot s$ with $\lambda = p \cdot s^b$ analogue to CFA.
-The modification reads in both cases as 'a number of $s$ cells shows the same 
-activity as if they were $s^b$ single cells'.
+Thus, allowing for the same communication and cooperativity (or competition), 
+we replace 
+$\lambda = p \cdot S$ with $\lambda = p \cdot S^b$ analogue to CFA.
+The modification reads in both cases as 'a number of $S$ cells shows the same 
+activity as if they were $S^b$ single cells'.
 
 With this generalization we find 
 
 \begin{align*}
 P_{\lambda}(k=0) &= e^{-\lambda}\\
-\Leftrightarrow 1-\mu &= e^{- p s^b}\\
-\Leftrightarrow log(1-\mu) &= - p s^b \\
-\Leftrightarrow log(-log(1-\mu)) &= \alpha + \xi \cdot b. 
+\Leftrightarrow \mu &= e^{- p S^b}\\
+\Leftrightarrow ln(\mu) &= - p S^b \\
+\Leftrightarrow ln(-ln(\mu)) &= \alpha + \xi \cdot b. 
 \end{align*}
 
 Interestingly, this equation is the same as in the special case of 
@@ -321,10 +326,10 @@ number of 20 colonies can be agreed upon - and a comparison of the number of
 required cells seeded with and without treatment is reasonable.
 
 Analogously, the ratio of cell numbers required to observe the same $\mu$ 
-(e.g. $\mu = 1-e^{-1}$) is of interest, when investigating the effect of 
+(e.g. $\mu = e^{-1}$) is of interest, when investigating the effect of 
 certain treatments. 
 
-\[SF_x = \frac{s_0(\lambda_0 = 1)}{s_x(\lambda_x = 1)}\]
+\[SF_x = \frac{S_0(\lambda_0 = 1)}{S_x(\lambda_x = 1)}\]
 can be calculated from the fitted GLM parameters as 
 \[SF_x = exp\left( \frac{log(p_x)}{b_x} - \frac{log(p_0)}{b_0}\right)\]
 

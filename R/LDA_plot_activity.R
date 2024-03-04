@@ -55,7 +55,7 @@ LDA_plot_activity <- function(LDA_obj,
   plot(x = x_sp$x,
        y = log(1-x_sp$y),
        xlim = xlim,
-       ylab = "log fract. nonresp.",
+       ylab = "ln fract. nonresp.",
        xlab = "cells seeded",
        pch = x_sp$pch,col = x_sp$col)
 
