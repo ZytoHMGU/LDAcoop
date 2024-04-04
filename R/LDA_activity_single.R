@@ -71,9 +71,9 @@ LDA_activity_single <- function(x,
   est <- sum.fit$coefficients
   Sig <- sum.fit$cov.unscaled
 
-  new.data <- data.frame("x" = log((10^seq(-4,
+  new.data <- data.frame("x" = log((10^seq(-3,
                                            max(log10(10*x$cells)),
-                                           1/10000))))
+                                           1/1000))))
   pred <- predict(object = fit.mod,
                   newdata = new.data,
                   type = "response",
@@ -97,6 +97,12 @@ LDA_activity_single <- function(x,
     x.ub.0 <- d.c[(which(x.uc<(-1))[1])-1]
     x.ub <- (x.ub.0+x.ub.1)/2
     rm(x.ub.0,x.ub.1)
+    if (is.na(x.ub)){
+      x.ub <- max(d.c)
+    }
+    if (is.na(x.lb)){
+      x.lb <- Inf
+    }
     return(c(x.ub,x.lb))
   }
   CI.95 <- calc_act_CI(pred,0.05)
