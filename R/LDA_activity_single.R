@@ -71,39 +71,80 @@ LDA_activity_single <- function(x,
   est <- sum.fit$coefficients
   Sig <- sum.fit$cov.unscaled
 
-  new.data <- data.frame("x" = log((10^seq(-3,
-                                           max(log10(10*x$cells)),
-                                           1/1000))))
+  x.est <- exp(-est[1,1]/est[2,1])
+
+  hl10 <- log10(x.est)
+  R5.min <- seq(hl10 - 10, hl10 -  4, 1/10  )[-1]
+  R4.min <- seq(hl10 -  4, hl10 -  3, 1/10  )[-1]
+  R3.min <- seq(hl10 -  3, hl10 -  2, 1/33  )[-1]
+  R2.min <- seq(hl10 -  2, hl10 -  1, 1/100 )[-1]
+  R1.min <- seq(hl10 -  1, hl10 -1/10,1/333 )[-1]
+  R0     <- seq(hl10 -1/10,hl10 +1/10,1/1000)[-1]
+  R1.max <- seq(hl10 +1/10,hl10 +  1, 1/333 )[-1]
+  R2.max <- seq(hl10 +  1, hl10 +  2, 1/100 )[-1]
+  R3.max <- seq(hl10 +  2, hl10 +  3, 1/33  )[-1]
+  R4.max <- seq(hl10 +  3, hl10 +  4, 1/10  )[-1]
+  R5.max <- seq(hl10 +  4, hl10 + 10, 1/10  )[-1]
+  Svec <- 10^c(R5.min,R4.min,R3.min,R2.min,R1.min,
+            R0,
+            R1.max,R2.max,R3.max,R4.max,R5.max)
+  rm(R5.min,R4.min,R3.min,R2.min,R1.min,R0,R1.max,R2.max,R3.max,R4.max,R5.max)
+
+  new.data <- data.frame("x" = log(Svec))
   pred <- predict(object = fit.mod,
                   newdata = new.data,
                   type = "response",
                   se.fit = TRUE)
 
-  x.est <- exp(-est[1,1]/est[2,1])
   # approximate 95% confidence interval
   d.c <-  exp(new.data$x)
   calc_act_CI <- function(pred, alpha){
     x.uc <- (1-(pred$fit+qnorm(1-alpha/2)*pred$se.fit))
+    x.lc <- (1-(pred$fit+qnorm(alpha/2)*pred$se.fit))
+    x.lc[x.lc<0] <- 0
+    x.lc[x.lc>1] <- 1
     x.uc[x.uc<0] <- 0
+    x.uc[x.uc>1] <- 1
+    x.m <- 1-pred$fit
+    x.lc <- log(x.lc)
     x.uc <- log(x.uc)
-    x.lc <- log(1-(pred$fit+qnorm(alpha/2)*pred$se.fit))
+    x.m <- log(x.m)
 
-    x.lb.1 <- d.c[which(x.lc<(-1))[1]]
-    x.lb.0 <- d.c[(which(x.lc<(-1))[1])-1]
-    x.lb <- (x.lb.0+x.lb.1)/2
-    rm(x.lb.0,x.lb.1)
+    # lower curve: x.uc 'coming from left'
+    if(min(x.uc>(-1)) || max(x.uc<(-1))){
+      if(min(x.uc>(-1))){
+        x.s1 <- Inf
+      } else {
+        x.s1 <- min(d.c)
+      }
+    } else {
+      x.r <- d.c[which(x.uc<(-1))[1]]
+      x.l <- d.c[which(x.uc<(-1))[1]-1]
+      y.r <- x.uc[which(x.uc<(-1))[1]]
+      y.l <- x.uc[which(x.uc<(-1))[1]-1]
+      x.s1 <- x.l + (x.r-x.l) * (1+y.l)/(y.l-y.r)
+      rm(x.r,x.l,y.r,y.l)
+    }
 
-    x.ub.1 <- d.c[which(x.uc<(-1))[1]]
-    x.ub.0 <- d.c[(which(x.uc<(-1))[1])-1]
-    x.ub <- (x.ub.0+x.ub.1)/2
-    rm(x.ub.0,x.ub.1)
-    if (is.na(x.ub)){
-      x.ub <- max(d.c)
+    # upper curve: x.lc 'coming from right'
+    if(min(x.lc>(-1)) || max(x.lc<(-1))){
+      if(min(x.lc>(-1))){
+        x.s2 <- Inf
+      } else {
+        x.s2 <- min(d.c)
+      }
+    } else {
+      x.lc <- x.lc[length(x.lc):1]
+      d.c <- d.c[length(d.c):1]
+      x.r <- d.c[which(x.lc>(-1))[1]]
+      x.l <- d.c[which(x.lc>(-1))[1]-1]
+      y.r <- x.lc[which(x.lc>(-1))[1]]
+      y.l <- x.lc[which(x.lc>(-1))[1]-1]
+      x.s2 <- x.l - abs(x.r-x.l) * abs(y.l+1)/abs(y.l-y.r)
+      rm(x.r,x.l,y.r,y.l)
     }
-    if (is.na(x.lb)){
-      x.lb <- Inf
-    }
-    return(c(x.ub,x.lb))
+
+    return(c(x.s1,x.s2))
   }
   CI.95 <- calc_act_CI(pred,0.05)
   # approximate 83.5% confidence interval
