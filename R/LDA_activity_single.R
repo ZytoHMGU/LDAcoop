@@ -98,6 +98,7 @@ LDA_activity_single <- function(x,
 
   # approximate 95% confidence interval
   d.c <-  exp(new.data$x)
+
   calc_act_CI <- function(pred, alpha){
     x.uc <- (1-(pred$fit+qnorm(1-alpha/2)*pred$se.fit))
     x.lc <- (1-(pred$fit+qnorm(alpha/2)*pred$se.fit))
@@ -111,8 +112,8 @@ LDA_activity_single <- function(x,
     x.m <- log(x.m)
 
     # lower curve: x.uc 'coming from left'
-    if(min(x.uc>(-1)) || max(x.uc<(-1))){
-      if(min(x.uc>(-1))){
+    if(min(x.uc)>(-1) || max(x.uc)<(-1)){
+      if(min(x.uc)>(-1)){
         x.s1 <- Inf
       } else {
         x.s1 <- min(d.c)
@@ -127,8 +128,8 @@ LDA_activity_single <- function(x,
     }
 
     # upper curve: x.lc 'coming from right'
-    if(min(x.lc>(-1)) || max(x.lc<(-1))){
-      if(min(x.lc>(-1))){
+    if(min(x.lc)>(-1) || max(x.lc)<(-1)){
+      if(min(x.lc)>(-1)){
         x.s2 <- Inf
       } else {
         x.s2 <- min(d.c)
