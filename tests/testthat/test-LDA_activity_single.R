@@ -45,3 +45,11 @@ test_that("cooperativity",{
   y <- LDA_activity_single(x[,1:3])
   expect_identical(y$p.lin.Model < 1, TRUE)
 })
+
+test_that("no signal",{
+  x <- data.frame("a" = c(512,256,128,64,32,16,8,4),
+                  "b" = c(8,8,8,8,8,8,8,8),
+                  "c" = c(0,0,0,0,0,0,0,0))
+  colnames(x) <- c("cells","wells","positive")
+  expect_error(LDA_activity_single(x))
+})

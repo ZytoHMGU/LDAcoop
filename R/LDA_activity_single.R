@@ -47,6 +47,9 @@ LDA_activity_single <- function(x,
   if (min(x$cells) == 0){
     stop("error: cells must be positive")
   }
+  if (sum(x$positive) == 0){
+    stop("error: no positive wells, check experiment")
+  }
   if (min(x$wells - x$positive) < 0){
     stop("error: number of wells must not be smaller than
          number of positive wells")
@@ -111,41 +114,31 @@ LDA_activity_single <- function(x,
     x.uc <- log(x.uc)
     x.m <- log(x.m)
 
-    # lower curve: x.uc 'coming from left'
-    if(min(x.uc)>(-1) || max(x.uc)<(-1)){
-      if(min(x.uc)>(-1)){
-        x.s1 <- Inf
-      } else {
-        x.s1 <- min(d.c)
-      }
-    } else {
+    #if(max(x.uc)<(-1)){
+    #  x.s1 <- min(d.c)
+    #} else {
       x.r <- d.c[which(x.uc<(-1))[1]]
       x.l <- d.c[which(x.uc<(-1))[1]-1]
       y.r <- x.uc[which(x.uc<(-1))[1]]
       y.l <- x.uc[which(x.uc<(-1))[1]-1]
       x.s1 <- x.l + (x.r-x.l) * (1+y.l)/(y.l-y.r)
       rm(x.r,x.l,y.r,y.l)
-    }
-
+    #}
     # upper curve: x.lc 'coming from right'
-    if(min(x.lc)>(-1) || max(x.lc)<(-1)){
-      if(min(x.lc)>(-1)){
-        x.s2 <- Inf
-      } else {
-        x.s2 <- min(d.c)
-      }
-    } else {
-      x.lc <- x.lc[length(x.lc):1]
-      d.c <- d.c[length(d.c):1]
+    #if(min(x.lc)>(-1)){
+    #  x.s2 <- Inf
+    #} else {
+      x.lc <- rev(x.lc)
+      d.c <- rev(d.c)
       x.r <- d.c[which(x.lc>(-1))[1]]
       x.l <- d.c[which(x.lc>(-1))[1]-1]
       y.r <- x.lc[which(x.lc>(-1))[1]]
       y.l <- x.lc[which(x.lc>(-1))[1]-1]
       x.s2 <- x.l - abs(x.r-x.l) * abs(y.l+1)/abs(y.l-y.r)
       rm(x.r,x.l,y.r,y.l)
-    }
+    #}
 
-    return(c(x.s1,x.s2))
+    return(as.numeric(c(x.s1,x.s2)))
   }
   CI.95 <- calc_act_CI(pred,0.05)
   # approximate 83.5% confidence interval
