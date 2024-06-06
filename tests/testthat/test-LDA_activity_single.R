@@ -53,3 +53,11 @@ test_that("no signal",{
   colnames(x) <- c("cells","wells","positive")
   expect_error(LDA_activity_single(x))
 })
+
+test_that("one postive condition",{
+  x <- data.frame("a" = c(512,256,128,64,32,16,8,4),
+                  "b" = c(8,8,8,8,8,8,8,8),
+                  "c" = c(0,0,0,0,0,0,0,4))
+  colnames(x) <- c("cells","wells","positive")
+  expect_error(LDA_activity_single(x))
+})

@@ -54,6 +54,14 @@ LDA_activity_single <- function(x,
     stop("error: number of wells must not be smaller than
          number of positive wells")
   }
+  if (sum(aggregate.data.frame(
+    x = x$positive>0,
+    by = list(positiv = x$cells),
+    FUN = sum)[,2] > 0) < 2){
+    stop("error: at least two cell numbers with positive wells required.
+          Remove condition from analysis or add wells or cell numbers.")
+  }
+
 
   single <- data.frame("cells" = rep(NA,sum(x$wells)),"positive" = NA)
   flnr <- 1
