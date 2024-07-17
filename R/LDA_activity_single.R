@@ -59,7 +59,7 @@ LDA_activity_single <- function(x,
     by = list(positiv = x$cells),
     FUN = sum)[,2] > 0) < 2){
     stop("error: at least two cell numbers with positive wells required.
-          Remove condition from analysis or add wells or cell numbers.")
+          Remove condition from analysis or add wells and/or cell numbers.")
   }
 
 
